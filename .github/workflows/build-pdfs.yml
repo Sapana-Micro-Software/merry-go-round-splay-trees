@@ -1,0 +1,44 @@
+name: Build LaTeX Proofs to PDF
+
+on:
+  push:
+    paths:
+      - 'proofs/*.tex'
+  workflow_dispatch:
+
+jobs:
+  build-pdfs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended
+          
+      - name: Build all PDFs
+        run: |
+          cd proofs
+          for tex in *.tex; do
+            echo "Building $tex..."
+            pdflatex -interaction=nonstopmode -output-directory=. "$tex" || echo "Failed: $tex"
+            pdflatex -interaction=nonstopmode -output-directory=. "$tex" || echo "Failed: $tex"
+          done
+          
+      - name: Commit PDFs
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add proofs/*.pdf || echo "No PDFs to add"
+          git commit -m "Auto-generate PDF proofs" || echo "No changes to commit"
+          git push || echo "Nothing to push"
+          
+      - name: Upload PDFs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-pdfs
+          path: proofs/*.pdf
+          retention-days: 90
+          if-no-files-found: warn
