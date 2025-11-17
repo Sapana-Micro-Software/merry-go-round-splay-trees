@@ -53,7 +53,9 @@ export class InteractiveEffects {
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.section, .project-card').forEach(el => {
-            observer.observe(el);
+            if (el instanceof HTMLElement) {
+                observer.observe(el);
+            }
         });
     }
     static addConfettiOnClick() {

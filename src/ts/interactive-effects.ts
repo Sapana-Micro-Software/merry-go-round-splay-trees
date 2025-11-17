@@ -14,22 +14,25 @@ export class InteractiveEffects {
 
     private static addRippleEffects(): void {
         document.querySelectorAll('.btn, .project-card, .accordion-header').forEach(element => {
-            element.addEventListener('click', function(this: HTMLElement, e: MouseEvent) {
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
+            if (element instanceof HTMLElement) {
+                element.addEventListener('click', (e: Event) => {
+                    const mouseEvent = e as MouseEvent;
+                    const ripple = document.createElement('span');
+                    const rect = element.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = mouseEvent.clientX - rect.left - size / 2;
+                    const y = mouseEvent.clientY - rect.top - size / 2;
 
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                ripple.classList.add('ripple');
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
 
-                this.appendChild(ripple);
+                    element.appendChild(ripple);
 
-                setTimeout(() => ripple.remove(), 600);
-            });
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            }
         });
     }
 
@@ -68,9 +71,11 @@ export class InteractiveEffects {
 
     private static addConfettiOnClick(): void {
         document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.createConfetti(btn);
-            });
+            if (btn instanceof HTMLElement) {
+                btn.addEventListener('click', () => {
+                    this.createConfetti(btn);
+                });
+            }
         });
     }
 
