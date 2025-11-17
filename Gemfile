@@ -1,15 +1,10 @@
 source "https://rubygems.org"
 
 gem "jekyll", "~> 4.3"
-gem "minima", "~> 2.5"
 gem "jekyll-feed", "~> 0.17"
 gem "jekyll-sitemap", "~> 1.4"
+gem "tzinfo", "~> 2.0"
 
-platforms :mingw, :x64_mingw, :mswin, :jruby do
-  gem "tzinfo", ">= 1", "< 3"
+platforms :mingw, :x64_mingw, :mswin do
   gem "wdm", "~> 0.1"
-end
-
-platforms :linux, :darwin do
-  gem "tzinfo", "~> 2.0"
 end
