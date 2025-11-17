@@ -1,0 +1,1 @@
+{"version":3,"file":"page-animations.d.ts","sourceRoot":"","sources":["../../src/ts/page-animations.ts"],"names":[],"mappings":"AAAA;;;;GAIG;AAEH,qBAAa,cAAc;IACvB,OAAO,CAAC,QAAQ,CAAuB;IACvC,OAAO,CAAC,gBAAgB,CAA2B;;IAgB5C,IAAI,IAAI,IAAI;IASnB,OAAO,CAAC,cAAc;IAItB,OAAO,CAAC,qBAAqB;IAa7B,OAAO,CAAC,aAAa;IAYrB,OAAO,CAAC,kBAAkB;CA8B7B"}

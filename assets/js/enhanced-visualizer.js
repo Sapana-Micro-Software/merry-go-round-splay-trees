@@ -3,88 +3,54 @@
  * Copyright (C) 2025, Shyamal Suhana Chandra
  * All rights reserved.
  */
-
-export interface TreeNode {
-    key: number;
-    value: string;
-    children: TreeNode[];
-    x: number;
-    y: number;
-    targetX: number;
-    targetY: number;
-    accessCount: number;
-    isLeaf: boolean;
-    color: string;
-    pulsePhase: number;
-}
-
-interface Particle {
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    life: number;
-    color: string;
-}
-
 export class EnhancedTreeVisualizer {
-    private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
-    private treeType: 'btree' | 'splay' = 'btree';
-    private nodes: TreeNode[] = [];
-    private particles: Particle[] = [];
-    private operations: number = 0;
-    private animationId: number | null = null;
-    private hoveredNode: TreeNode | null = null;
-    private selectedNode: TreeNode | null = null;
-    private time: number = 0;
-
-    constructor(canvasId: string) {
-        this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+    constructor(canvasId) {
+        this.treeType = 'btree';
+        this.nodes = [];
+        this.particles = [];
+        this.operations = 0;
+        this.animationId = null;
+        this.hoveredNode = null;
+        this.selectedNode = null;
+        this.time = 0;
+        this.canvas = document.getElementById(canvasId);
         if (!this.canvas) {
             throw new Error(`Canvas element with id ${canvasId} not found`);
         }
-        this.ctx = this.canvas.getContext('2d')!;
+        this.ctx = this.canvas.getContext('2d');
         this.setupEventListeners();
         this.init();
     }
-
-    private setupEventListeners(): void {
+    setupEventListeners() {
         const btreeBtn = document.getElementById('btn-btree');
         const splayBtn = document.getElementById('btn-splay');
         const resetBtn = document.getElementById('btn-reset');
-
         btreeBtn?.addEventListener('click', () => {
             this.treeType = 'btree';
             this.updateButtons('btree');
             this.init();
         });
-
         splayBtn?.addEventListener('click', () => {
             this.treeType = 'splay';
             this.updateButtons('splay');
             this.init();
         });
-
         resetBtn?.addEventListener('click', () => {
             this.init();
         });
-
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         this.canvas.addEventListener('click', (e) => this.handleClick(e));
         this.canvas.addEventListener('mouseleave', () => {
             this.hoveredNode = null;
         });
     }
-
-    private handleMouseMove(e: MouseEvent): void {
+    handleMouseMove(e) {
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         this.hoveredNode = this.findNodeAt(x, y);
     }
-
-    private handleClick(e: MouseEvent): void {
+    handleClick(e) {
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -97,8 +63,7 @@ export class EnhancedTreeVisualizer {
             }
         }
     }
-
-    private findNodeAt(x: number, y: number): TreeNode | null {
+    findNodeAt(x, y) {
         for (const node of this.nodes) {
             const dx = x - node.x;
             const dy = y - node.y;
@@ -108,16 +73,14 @@ export class EnhancedTreeVisualizer {
         }
         return null;
     }
-
-    private updateButtons(active: string): void {
+    updateButtons(active) {
         document.querySelectorAll('.viz-btn').forEach(btn => {
             btn.classList.remove('active');
         });
         const activeBtn = document.getElementById(`btn-${active}`);
         activeBtn?.classList.add('active');
     }
-
-    private init(): void {
+    init() {
         this.nodes = [];
         this.particles = [];
         this.operations = 0;
@@ -126,9 +89,8 @@ export class EnhancedTreeVisualizer {
         this.updateStats();
         this.animate();
     }
-
-    private generateSampleTree(): void {
-        const root: TreeNode = {
+    generateSampleTree() {
+        const root = {
             key: 50,
             value: 'Root',
             children: [],
@@ -141,25 +103,23 @@ export class EnhancedTreeVisualizer {
             color: '#667eea',
             pulsePhase: Math.random() * Math.PI * 2
         };
-
         if (this.treeType === 'btree') {
             this.generateBTree(root, 3);
-        } else {
+        }
+        else {
             this.generateSplayTree(root, 2);
         }
-
         this.nodes = this.flattenTree(root);
         this.layoutTree();
     }
-
-    private generateBTree(node: TreeNode, depth: number): void {
+    generateBTree(node, depth) {
         if (depth === 0) {
             node.isLeaf = true;
             return;
         }
         const numChildren = Math.floor(Math.random() * 3) + 2;
         for (let i = 0; i < numChildren; i++) {
-            const child: TreeNode = {
+            const child = {
                 key: node.key + (i - numChildren / 2) * 20 + Math.floor(Math.random() * 10),
                 value: `Node ${i}`,
                 children: [],
@@ -172,8 +132,7 @@ export class EnhancedTreeVisualizer {
             node.children.push(child);
         }
     }
-
-    private generateSplayTree(node: TreeNode, depth: number): void {
+    generateSplayTree(node, depth) {
         if (depth === 0) {
             node.isLeaf = true;
             node.accessCount = Math.floor(Math.random() * 10);
@@ -181,7 +140,7 @@ export class EnhancedTreeVisualizer {
         }
         const numChildren = Math.floor(Math.random() * 3) + 1;
         for (let i = 0; i < numChildren; i++) {
-            const child: TreeNode = {
+            const child = {
                 key: node.key + (i - numChildren / 2) * 30 + Math.floor(Math.random() * 15),
                 value: `Node ${i}`,
                 children: [],
@@ -196,36 +155,31 @@ export class EnhancedTreeVisualizer {
         }
         node.accessCount = Math.floor(Math.random() * 10);
     }
-
-    private flattenTree(node: TreeNode): TreeNode[] {
-        const result: TreeNode[] = [node];
+    flattenTree(node) {
+        const result = [node];
         for (const child of node.children) {
             result.push(...this.flattenTree(child));
         }
         return result;
     }
-
-    private layoutTree(): void {
-        const levels: TreeNode[][] = [];
-        const queue: { node: TreeNode; level: number }[] = [{ node: this.nodes[0], level: 0 }];
-
+    layoutTree() {
+        const levels = [];
+        const queue = [{ node: this.nodes[0], level: 0 }];
         while (queue.length > 0) {
-            const { node, level } = queue.shift()!;
-            if (!levels[level]) levels[level] = [];
+            const { node, level } = queue.shift();
+            if (!levels[level])
+                levels[level] = [];
             levels[level].push(node);
             for (const child of node.children) {
                 queue.push({ node: child, level: level + 1 });
             }
         }
-
         const horizontalSpacing = 150;
         const verticalSpacing = 120;
-
         levels.forEach((levelNodes, level) => {
             const levelWidth = levelNodes.length * horizontalSpacing;
             const startX = (this.canvas.width - levelWidth) / 2 + horizontalSpacing / 2;
             const y = 50 + level * verticalSpacing;
-
             levelNodes.forEach((node, index) => {
                 node.targetX = startX + index * horizontalSpacing;
                 node.targetY = y;
@@ -234,8 +188,7 @@ export class EnhancedTreeVisualizer {
             });
         });
     }
-
-    private draw(): void {
+    draw() {
         this.time += 0.02;
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -251,24 +204,21 @@ export class EnhancedTreeVisualizer {
             this.drawTooltip(this.hoveredNode);
         }
     }
-
-    private drawBackground(): void {
+    drawBackground() {
         const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
         gradient.addColorStop(0, 'rgba(102, 126, 234, 0.05)');
         gradient.addColorStop(1, 'rgba(118, 75, 162, 0.05)');
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
-
-    private updateNodePosition(node: TreeNode): void {
+    updateNodePosition(node) {
         const dx = node.targetX - node.x;
         const dy = node.targetY - node.y;
         node.x += dx * 0.1;
         node.y += dy * 0.1;
         node.pulsePhase += 0.05;
     }
-
-    private drawEdges(): void {
+    drawEdges() {
         this.ctx.shadowBlur = 10;
         this.ctx.shadowColor = 'rgba(102, 126, 234, 0.3)';
         this.nodes.forEach(node => {
@@ -286,28 +236,25 @@ export class EnhancedTreeVisualizer {
         });
         this.ctx.shadowBlur = 0;
     }
-
-    private drawNode(node: TreeNode): void {
+    drawNode(node) {
         const radius = 30;
         const isHovered = this.hoveredNode === node;
         const isSelected = this.selectedNode === node;
         const scale = isHovered ? 1.2 : (isSelected ? 1.15 : 1.0);
         const pulse = Math.sin(node.pulsePhase) * 3;
         const finalRadius = radius * scale + pulse;
-
         if (this.treeType === 'splay' && node.accessCount > 0) {
             const intensity = Math.min(1, 0.4 + node.accessCount / 20);
             node.color = `rgba(102, 126, 234, ${intensity})`;
-        } else if (node.isLeaf) {
+        }
+        else if (node.isLeaf) {
             node.color = '#f093fb';
-        } else {
+        }
+        else {
             node.color = '#667eea';
         }
-
         if (isHovered || isSelected) {
-            const glowGradient = this.ctx.createRadialGradient(
-                node.x, node.y, 0, node.x, node.y, finalRadius + 10
-            );
+            const glowGradient = this.ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, finalRadius + 10);
             glowGradient.addColorStop(0, node.color);
             glowGradient.addColorStop(1, 'transparent');
             this.ctx.fillStyle = glowGradient;
@@ -315,22 +262,16 @@ export class EnhancedTreeVisualizer {
             this.ctx.arc(node.x, node.y, finalRadius + 10, 0, Math.PI * 2);
             this.ctx.fill();
         }
-
-        const nodeGradient = this.ctx.createRadialGradient(
-            node.x - 10, node.y - 10, 0, node.x, node.y, finalRadius
-        );
+        const nodeGradient = this.ctx.createRadialGradient(node.x - 10, node.y - 10, 0, node.x, node.y, finalRadius);
         nodeGradient.addColorStop(0, this.lightenColor(node.color, 0.3));
         nodeGradient.addColorStop(1, node.color);
-        
         this.ctx.fillStyle = nodeGradient;
         this.ctx.beginPath();
         this.ctx.arc(node.x, node.y, finalRadius, 0, Math.PI * 2);
         this.ctx.fill();
-
         this.ctx.strokeStyle = isHovered ? '#fff' : '#333';
         this.ctx.lineWidth = isHovered ? 3 : 2;
         this.ctx.stroke();
-
         this.ctx.fillStyle = '#fff';
         this.ctx.font = `bold ${14 * scale}px sans-serif`;
         this.ctx.textAlign = 'center';
@@ -339,15 +280,13 @@ export class EnhancedTreeVisualizer {
         this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
         this.ctx.fillText(node.key.toString(), node.x, node.y);
         this.ctx.shadowBlur = 0;
-
         if (this.treeType === 'splay' && node.accessCount > 0) {
             this.ctx.fillStyle = '#fff';
             this.ctx.font = '10px sans-serif';
             this.ctx.fillText(`#${node.accessCount}`, node.x, node.y + 35);
         }
     }
-
-    private lightenColor(color: string, amount: number): string {
+    lightenColor(color, amount) {
         if (color.startsWith('rgba')) {
             const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
             if (match) {
@@ -360,8 +299,7 @@ export class EnhancedTreeVisualizer {
         }
         return color;
     }
-
-    private createParticles(x: number, y: number, color: string): void {
+    createParticles(x, y, color) {
         for (let i = 0; i < 20; i++) {
             this.particles.push({
                 x, y,
@@ -372,8 +310,7 @@ export class EnhancedTreeVisualizer {
             });
         }
     }
-
-    private updateParticles(): void {
+    updateParticles() {
         this.particles = this.particles.filter(particle => {
             particle.x += particle.vx;
             particle.y += particle.vy;
@@ -382,8 +319,7 @@ export class EnhancedTreeVisualizer {
             return particle.life > 0;
         });
     }
-
-    private drawParticles(): void {
+    drawParticles() {
         this.particles.forEach(particle => {
             this.ctx.globalAlpha = particle.life;
             this.ctx.fillStyle = particle.color;
@@ -393,8 +329,7 @@ export class EnhancedTreeVisualizer {
         });
         this.ctx.globalAlpha = 1.0;
     }
-
-    private drawTooltip(node: TreeNode): void {
+    drawTooltip(node) {
         const text = `Key: ${node.key}\nAccess: ${node.accessCount}\nType: ${node.isLeaf ? 'Leaf' : 'Internal'}`;
         const lines = text.split('\n');
         const padding = 10;
@@ -403,7 +338,6 @@ export class EnhancedTreeVisualizer {
         const height = lines.length * lineHeight + padding * 2;
         const x = node.x + 50;
         const y = node.y - height / 2;
-
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         this.ctx.fillRect(x, y, width, height);
         this.ctx.strokeStyle = '#667eea';
@@ -416,8 +350,7 @@ export class EnhancedTreeVisualizer {
             this.ctx.fillText(line, x + padding, y + padding + (i + 1) * lineHeight);
         });
     }
-
-    private animate(): void {
+    animate() {
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);
         }
@@ -427,18 +360,19 @@ export class EnhancedTreeVisualizer {
         };
         animate();
     }
-
-    private updateStats(): void {
+    updateStats() {
         const height = Math.max(...this.nodes.map(n => n.y)) / 120;
         const nodesEl = document.getElementById('stat-nodes');
         const heightEl = document.getElementById('stat-height');
         const opsEl = document.getElementById('stat-ops');
-        if (nodesEl) nodesEl.textContent = this.nodes.length.toString();
-        if (heightEl) heightEl.textContent = Math.ceil(height).toString();
-        if (opsEl) opsEl.textContent = this.operations.toString();
+        if (nodesEl)
+            nodesEl.textContent = this.nodes.length.toString();
+        if (heightEl)
+            heightEl.textContent = Math.ceil(height).toString();
+        if (opsEl)
+            opsEl.textContent = this.operations.toString();
     }
-
-    public simulateOperation(): void {
+    simulateOperation() {
         this.operations++;
         if (this.treeType === 'splay' && this.nodes.length > 1) {
             const randomNode = this.nodes[Math.floor(Math.random() * this.nodes.length)];
@@ -448,30 +382,27 @@ export class EnhancedTreeVisualizer {
         }
         this.updateStats();
     }
-
-    private animateSplay(node: TreeNode): void {
+    animateSplay(node) {
         const startX = node.x;
         const startY = node.y;
         const endX = this.canvas.width / 2;
         const endY = 50;
         const duration = 1000;
         const startTime = Date.now();
-
         const animate = () => {
             const elapsed = Date.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
             const ease = 1 - Math.pow(1 - progress, 3);
-
             node.x = startX + (endX - startX) * ease;
             node.y = startY + (endY - startY) * ease;
-
             if (progress < 1) {
                 requestAnimationFrame(animate);
-            } else {
+            }
+            else {
                 const root = this.nodes[0];
-                [root.x, root.y, root.targetX, root.targetY] = 
+                [root.x, root.y, root.targetX, root.targetY] =
                     [node.x, node.y, node.targetX, node.targetY];
-                [node.x, node.y, node.targetX, node.targetY] = 
+                [node.x, node.y, node.targetX, node.targetY] =
                     [endX, endY, endX, endY];
                 this.createParticles(node.x, node.y, node.color);
             }
@@ -479,3 +410,4 @@ export class EnhancedTreeVisualizer {
         animate();
     }
 }
+//# sourceMappingURL=enhanced-visualizer.js.map
