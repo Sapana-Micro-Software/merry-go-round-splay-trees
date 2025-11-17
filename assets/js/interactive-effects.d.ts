@@ -9,6 +9,8 @@ export declare class InteractiveEffects {
     private static addTypingEffect;
     private static addScrollReveal;
     private static addConfettiOnClick;
+    static addMagneticEffect(): void;
+    static addCursorTrail(): void;
     private static createConfetti;
 }
 //# sourceMappingURL=interactive-effects.d.ts.map

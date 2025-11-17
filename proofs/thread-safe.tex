@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Thread-Safe Operation Overhead Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Thread-Safe Operation Overhead}
+
+\textbf{Statement:} Thread-safe operations add $O(1)$ overhead per operation in the uncontended case.
+
+\section{Proof}
+
+Thread-safe operations involve:
+\begin{itemize}
+    \item Mutex lock/unlock: $O(1)$ in uncontended case
+    \item Atomic operations: $O(1)$
+    \item Thread pool enqueue: $O(1)$ amortized
+\end{itemize}
+
+\subsection{Uncontended Case}
+
+When no other thread is accessing the resource:
+\begin{align}
+\text{Overhead} &= \text{lock} + \text{operation} + \text{unlock} \\
+&= O(1) + O(1) + O(1) \\
+&= O(1)
+\end{align}
+
+\subsection{Contended Case}
+
+When $k$ threads are waiting:
+\begin{itemize}
+    \item Lock acquisition: $O(k)$ worst case (linear in waiting threads)
+    \item However, average case remains $O(1)$ for low contention
+    \item With thread pool: operations are queued, reducing contention
+\end{itemize}
+
+Average overhead with thread pool:
+\begin{align}
+\text{Amortized overhead} &= \frac{\text{Total overhead}}{\text{Number of operations}} \\
+&= \frac{O(n)}{n} \text{ (for $n$ operations)} \\
+&= O(1)
+\end{align}
+
+\section{Detailed Analysis}
+
+\subsection{Mutex Operations}
+
+\begin{itemize}
+    \item \textbf{Lock:} $O(1)$ when mutex is available
+    \item \textbf{Unlock:} $O(1)$ always
+    \item \textbf{Contention:} $O(k)$ where $k$ is number of waiting threads
+\end{itemize}
+
+\subsection{Atomic Operations}
+
+\begin{itemize}
+    \item Compare-and-swap: $O(1)$
+    \item Load/Store: $O(1)$
+    \item Memory barriers: $O(1)$
+\end{itemize}
+
+\subsection{Thread Pool}
+
+\begin{itemize}
+    \item Enqueue operation: $O(1)$ amortized
+    \item Dequeue operation: $O(1)$ amortized
+    \item Worker thread scheduling: handled by OS, $O(1)$ overhead
+\end{itemize}
+
+\textbf{Conclusion:} Thread-safe operations add $O(1)$ overhead per operation in the average case. Worst-case overhead is $O(k)$ where $k$ is the number of contending threads, but this is rare in practice with proper thread pool management.
+
+\section{Practical Considerations}
+
+\begin{itemize}
+    \item Low contention: Overhead is negligible ($< 1\%$)
+    \item Medium contention: Overhead increases but remains acceptable
+    \item High contention: Consider lock-free data structures or sharding
+\end{itemize}
+
+For tree operations with $O(\log n)$ complexity, the $O(1)$ thread-safety overhead is dominated by the operation itself, maintaining the same asymptotic complexity.
+
+\end{document}

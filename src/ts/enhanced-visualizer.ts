@@ -38,14 +38,25 @@ class EnhancedTreeVisualizer {
     private hoveredNode: TreeNode | null = null;
     private selectedNode: TreeNode | null = null;
     private time: number = 0;
+    private zoom: number = 1;
+    private panX: number = 0;
+    private panY: number = 0;
+    private isDragging: boolean = false;
+    private dragStartX: number = 0;
+    private dragStartY: number = 0;
+    private dragStartPanX: number = 0;
+    private dragStartPanY: number = 0;
+    private animationSpeed: number = 1;
+    private trail: Array<{ x: number; y: number; life: number }> = [];
 
     constructor(canvasId: string) {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         if (!this.canvas) {
             throw new Error(`Canvas element with id ${canvasId} not found`);
         }
-        this.ctx = this.canvas.getContext('2d')!;
+        this.ctx = this.canvas.getContext('2d', { alpha: true })!;
         this.setupEventListeners();
+        this.setupControls();
         this.init();
     }
 
@@ -67,33 +78,151 @@ class EnhancedTreeVisualizer {
         });
 
         resetBtn?.addEventListener('click', () => {
+            this.zoom = 1;
+            this.panX = 0;
+            this.panY = 0;
             this.init();
         });
 
+        // Mouse events
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         this.canvas.addEventListener('click', (e) => this.handleClick(e));
         this.canvas.addEventListener('mouseleave', () => {
             this.hoveredNode = null;
+            this.isDragging = false;
+        });
+
+        // Drag to pan
+        this.canvas.addEventListener('mousedown', (e) => {
+            if (e.button === 0 && !this.hoveredNode) {
+                this.isDragging = true;
+                this.dragStartX = e.clientX;
+                this.dragStartY = e.clientY;
+                this.dragStartPanX = this.panX;
+                this.dragStartPanY = this.panY;
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (this.isDragging) {
+                this.panX = this.dragStartPanX + (e.clientX - this.dragStartX) / this.zoom;
+                this.panY = this.dragStartPanY + (e.clientY - this.dragStartY) / this.zoom;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            this.isDragging = false;
+        });
+
+        // Zoom with wheel
+        this.canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+            const newZoom = Math.max(0.5, Math.min(3, this.zoom * zoomFactor));
+            
+            const zoomChange = newZoom / this.zoom;
+            this.panX = mouseX - (mouseX - this.panX) * zoomChange;
+            this.panY = mouseY - (mouseY - this.panY) * zoomChange;
+            this.zoom = newZoom;
+        });
+    }
+
+    private setupControls(): void {
+        // Create control panel
+        const controls = document.createElement('div');
+        controls.id = 'tree-controls';
+        controls.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            font-family: sans-serif;
+        `;
+        
+        controls.innerHTML = `
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #666;">Animation Speed:</label>
+                <input type="range" id="speed-control" min="0.1" max="3" step="0.1" value="1" 
+                    style="width: 150px;">
+                <span id="speed-value" style="margin-left: 10px; font-size: 12px; color: #667eea;">1.0x</span>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #666;">Zoom:</label>
+                <input type="range" id="zoom-control" min="0.5" max="3" step="0.1" value="1" 
+                    style="width: 150px;">
+                <span id="zoom-value" style="margin-left: 10px; font-size: 12px; color: #667eea;">100%</span>
+            </div>
+            <div style="font-size: 11px; color: #999; margin-top: 10px;">
+                <div>🖱️ Drag to pan</div>
+                <div>🔍 Scroll to zoom</div>
+            </div>
+        `;
+        
+        const vizContainer = this.canvas.parentElement;
+        if (vizContainer) {
+            vizContainer.style.position = 'relative';
+            vizContainer.appendChild(controls);
+        }
+
+        const speedControl = document.getElementById('speed-control') as HTMLInputElement;
+        const zoomControl = document.getElementById('zoom-control') as HTMLInputElement;
+        
+        speedControl?.addEventListener('input', (e) => {
+            this.animationSpeed = parseFloat((e.target as HTMLInputElement).value);
+            const speedValue = document.getElementById('speed-value');
+            if (speedValue) speedValue.textContent = `${this.animationSpeed.toFixed(1)}x`;
+        });
+
+        zoomControl?.addEventListener('input', (e) => {
+            this.zoom = parseFloat((e.target as HTMLInputElement).value);
+            const zoomValue = document.getElementById('zoom-value');
+            if (zoomValue) zoomValue.textContent = `${Math.round(this.zoom * 100)}%`;
         });
     }
 
     private handleMouseMove(e: MouseEvent): void {
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = (e.clientX - rect.left - this.panX) / this.zoom;
+        const y = (e.clientY - rect.top - this.panY) / this.zoom;
         this.hoveredNode = this.findNodeAt(x, y);
+        
+        // Add to trail
+        if (this.hoveredNode) {
+            this.trail.push({ x: this.hoveredNode.x, y: this.hoveredNode.y, life: 1.0 });
+            if (this.trail.length > 20) this.trail.shift();
+        }
     }
 
     private handleClick(e: MouseEvent): void {
+        if (this.isDragging) return;
+        
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = (e.clientX - rect.left - this.panX) / this.zoom;
+        const y = (e.clientY - rect.top - this.panY) / this.zoom;
         const node = this.findNodeAt(x, y);
         if (node) {
             this.selectedNode = node;
             this.createParticles(node.x, node.y, node.color);
             if (this.treeType === 'splay') {
                 this.animateSplay(node);
+            }
+            // Add visual feedback
+            this.trail = [];
+            for (let i = 0; i < 30; i++) {
+                this.trail.push({ 
+                    x: node.x + (Math.random() - 0.5) * 50, 
+                    y: node.y + (Math.random() - 0.5) * 50, 
+                    life: 1.0 
+                });
             }
         }
     }
@@ -236,28 +365,93 @@ class EnhancedTreeVisualizer {
     }
 
     private draw(): void {
-        this.time += 0.02;
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        this.time += 0.02 * this.animationSpeed;
+        
+        // Clear with fade
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Save context for transformations
+        this.ctx.save();
+        this.ctx.translate(this.panX, this.panY);
+        this.ctx.scale(this.zoom, this.zoom);
+        
         this.drawBackground();
         this.updateParticles();
+        this.drawTrail();
         this.drawEdges();
         this.nodes.forEach(node => {
             this.updateNodePosition(node);
             this.drawNode(node);
         });
         this.drawParticles();
+        
+        // Restore context
+        this.ctx.restore();
+        
         if (this.hoveredNode) {
             this.drawTooltip(this.hoveredNode);
         }
     }
 
     private drawBackground(): void {
-        const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
-        gradient.addColorStop(0, 'rgba(102, 126, 234, 0.05)');
-        gradient.addColorStop(1, 'rgba(118, 75, 162, 0.05)');
+        // Animated gradient background
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
+        const radius = Math.max(this.canvas.width, this.canvas.height) * 0.8;
+        
+        const gradient = this.ctx.createRadialGradient(
+            centerX + Math.sin(this.time) * 100,
+            centerY + Math.cos(this.time) * 100,
+            0,
+            centerX,
+            centerY,
+            radius
+        );
+        gradient.addColorStop(0, 'rgba(102, 126, 234, 0.08)');
+        gradient.addColorStop(0.5, 'rgba(118, 75, 162, 0.05)');
+        gradient.addColorStop(1, 'rgba(240, 147, 251, 0.02)');
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Grid pattern
+        this.ctx.strokeStyle = 'rgba(102, 126, 234, 0.05)';
+        this.ctx.lineWidth = 1;
+        const gridSize = 50;
+        for (let x = 0; x < this.canvas.width; x += gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(x, 0);
+            this.ctx.lineTo(x, this.canvas.height);
+            this.ctx.stroke();
+        }
+        for (let y = 0; y < this.canvas.height; y += gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, y);
+            this.ctx.lineTo(this.canvas.width, y);
+            this.ctx.stroke();
+        }
+    }
+
+    private drawTrail(): void {
+        this.trail = this.trail.filter(point => {
+            point.life -= 0.05;
+            return point.life > 0;
+        });
+        
+        this.trail.forEach((point, i) => {
+            const alpha = point.life * 0.5;
+            const size = 3 * point.life;
+            const gradient = this.ctx.createRadialGradient(
+                point.x, point.y, 0,
+                point.x, point.y, size
+            );
+            gradient.addColorStop(0, `rgba(102, 126, 234, ${alpha})`);
+            gradient.addColorStop(1, 'rgba(102, 126, 234, 0)');
+            this.ctx.fillStyle = gradient;
+            this.ctx.beginPath();
+            this.ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
+            this.ctx.fill();
+        });
     }
 
     private updateNodePosition(node: TreeNode): void {
@@ -291,10 +485,11 @@ class EnhancedTreeVisualizer {
         const radius = 30;
         const isHovered = this.hoveredNode === node;
         const isSelected = this.selectedNode === node;
-        const scale = isHovered ? 1.2 : (isSelected ? 1.15 : 1.0);
-        const pulse = Math.sin(node.pulsePhase) * 3;
+        const scale = isHovered ? 1.3 : (isSelected ? 1.2 : 1.0);
+        const pulse = Math.sin(node.pulsePhase + this.time * 2) * 4;
         const finalRadius = radius * scale + pulse;
 
+        // Dynamic color based on state
         if (this.treeType === 'splay' && node.accessCount > 0) {
             const intensity = Math.min(1, 0.4 + node.accessCount / 20);
             node.color = `rgba(102, 126, 234, ${intensity})`;
@@ -304,47 +499,91 @@ class EnhancedTreeVisualizer {
             node.color = '#667eea';
         }
 
+        // Enhanced glow effect
         if (isHovered || isSelected) {
+            const glowRadius = finalRadius + 20;
             const glowGradient = this.ctx.createRadialGradient(
-                node.x, node.y, 0, node.x, node.y, finalRadius + 10
+                node.x, node.y, 0, node.x, node.y, glowRadius
             );
-            glowGradient.addColorStop(0, node.color);
+            glowGradient.addColorStop(0, node.color.replace('rgb', 'rgba').replace(')', ', 0.6)'));
+            glowGradient.addColorStop(0.5, node.color.replace('rgb', 'rgba').replace(')', ', 0.3)'));
             glowGradient.addColorStop(1, 'transparent');
             this.ctx.fillStyle = glowGradient;
             this.ctx.beginPath();
-            this.ctx.arc(node.x, node.y, finalRadius + 10, 0, Math.PI * 2);
+            this.ctx.arc(node.x, node.y, glowRadius, 0, Math.PI * 2);
             this.ctx.fill();
         }
 
+        // Outer ring animation
+        if (isSelected) {
+            const ringRadius = finalRadius + 15 + Math.sin(this.time * 3) * 5;
+            this.ctx.strokeStyle = node.color.replace('rgb', 'rgba').replace(')', ', 0.4)');
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.arc(node.x, node.y, ringRadius, 0, Math.PI * 2);
+            this.ctx.stroke();
+        }
+
+        // Main node gradient
         const nodeGradient = this.ctx.createRadialGradient(
-            node.x - 10, node.y - 10, 0, node.x, node.y, finalRadius
+            node.x - 15, node.y - 15, 0, node.x, node.y, finalRadius
         );
-        nodeGradient.addColorStop(0, this.lightenColor(node.color, 0.3));
-        nodeGradient.addColorStop(1, node.color);
+        nodeGradient.addColorStop(0, '#ffffff');
+        nodeGradient.addColorStop(0.3, this.lightenColor(node.color, 0.4));
+        nodeGradient.addColorStop(0.7, node.color);
+        nodeGradient.addColorStop(1, this.darkenColor(node.color, 0.2));
         
         this.ctx.fillStyle = nodeGradient;
         this.ctx.beginPath();
         this.ctx.arc(node.x, node.y, finalRadius, 0, Math.PI * 2);
         this.ctx.fill();
 
-        this.ctx.strokeStyle = isHovered ? '#fff' : '#333';
-        this.ctx.lineWidth = isHovered ? 3 : 2;
+        // Enhanced border
+        const borderGradient = this.ctx.createLinearGradient(
+            node.x - finalRadius, node.y - finalRadius,
+            node.x + finalRadius, node.y + finalRadius
+        );
+        borderGradient.addColorStop(0, isHovered ? '#fff' : '#333');
+        borderGradient.addColorStop(1, isHovered ? '#667eea' : '#666');
+        this.ctx.strokeStyle = borderGradient;
+        this.ctx.lineWidth = isHovered ? 4 : 2.5;
         this.ctx.stroke();
 
+        // Text with shadow
         this.ctx.fillStyle = '#fff';
-        this.ctx.font = `bold ${14 * scale}px sans-serif`;
+        this.ctx.font = `bold ${Math.floor(14 * scale)}px sans-serif`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
-        this.ctx.shadowBlur = 2;
-        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+        this.ctx.shadowBlur = 4;
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
         this.ctx.fillText(node.key.toString(), node.x, node.y);
         this.ctx.shadowBlur = 0;
 
+        // Access count badge
         if (this.treeType === 'splay' && node.accessCount > 0) {
+            const badgeRadius = 12;
+            this.ctx.fillStyle = 'rgba(118, 75, 162, 0.9)';
+            this.ctx.beginPath();
+            this.ctx.arc(node.x + finalRadius - 8, node.y - finalRadius + 8, badgeRadius, 0, Math.PI * 2);
+            this.ctx.fill();
             this.ctx.fillStyle = '#fff';
-            this.ctx.font = '10px sans-serif';
-            this.ctx.fillText(`#${node.accessCount}`, node.x, node.y + 35);
+            this.ctx.font = 'bold 9px sans-serif';
+            this.ctx.fillText(node.accessCount.toString(), node.x + finalRadius - 8, node.y - finalRadius + 8);
         }
+    }
+
+    private darkenColor(color: string, amount: number): string {
+        if (color.startsWith('rgba')) {
+            const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+            if (match) {
+                const r = Math.max(0, parseInt(match[1]) - amount * 255);
+                const g = Math.max(0, parseInt(match[2]) - amount * 255);
+                const b = Math.max(0, parseInt(match[3]) - amount * 255);
+                const a = match[4] || '1';
+                return `rgba(${r}, ${g}, ${b}, ${a})`;
+            }
+        }
+        return color;
     }
 
     private lightenColor(color: string, amount: number): string {
@@ -395,26 +634,59 @@ class EnhancedTreeVisualizer {
     }
 
     private drawTooltip(node: TreeNode): void {
+        // Convert canvas coordinates to screen coordinates
+        const screenX = node.x * this.zoom + this.panX;
+        const screenY = node.y * this.zoom + this.panY;
+        
         const text = `Key: ${node.key}\nAccess: ${node.accessCount}\nType: ${node.isLeaf ? 'Leaf' : 'Internal'}`;
         const lines = text.split('\n');
-        const padding = 10;
-        const lineHeight = 18;
-        const width = 150;
+        const padding = 12;
+        const lineHeight = 20;
+        const width = 180;
         const height = lines.length * lineHeight + padding * 2;
-        const x = node.x + 50;
-        const y = node.y - height / 2;
+        let x = screenX + 60;
+        let y = screenY - height / 2;
+        
+        // Keep tooltip on screen
+        if (x + width > this.canvas.width) x = screenX - width - 10;
+        if (y + height > this.canvas.height) y = this.canvas.height - height - 10;
+        if (y < 0) y = 10;
 
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        // Glassmorphism background
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
         this.ctx.fillRect(x, y, width, height);
-        this.ctx.strokeStyle = '#667eea';
-        this.ctx.lineWidth = 2;
+        
+        // Border with gradient
+        const borderGradient = this.ctx.createLinearGradient(x, y, x + width, y + height);
+        borderGradient.addColorStop(0, '#667eea');
+        borderGradient.addColorStop(1, '#764ba2');
+        this.ctx.strokeStyle = borderGradient;
+        this.ctx.lineWidth = 3;
         this.ctx.strokeRect(x, y, width, height);
-        this.ctx.fillStyle = '#fff';
-        this.ctx.font = '12px sans-serif';
+        
+        // Shadow
+        this.ctx.shadowBlur = 20;
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 5;
+        
+        // Text
+        this.ctx.fillStyle = '#333';
+        this.ctx.font = 'bold 13px sans-serif';
         this.ctx.textAlign = 'left';
+        this.ctx.textBaseline = 'top';
         lines.forEach((line, i) => {
-            this.ctx.fillText(line, x + padding, y + padding + (i + 1) * lineHeight);
+            const parts = line.split(':');
+            if (parts.length === 2) {
+                this.ctx.fillStyle = '#667eea';
+                this.ctx.fillText(parts[0] + ':', x + padding, y + padding + i * lineHeight);
+                this.ctx.fillStyle = '#333';
+                this.ctx.fillText(parts[1], x + padding + 80, y + padding + i * lineHeight);
+            } else {
+                this.ctx.fillText(line, x + padding, y + padding + i * lineHeight);
+            }
         });
+        this.ctx.shadowBlur = 0;
     }
 
     private animate(): void {

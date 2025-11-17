@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{B-Tree Space Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: B-Tree Space Complexity}
+
+\textbf{Statement:} A B-Tree with $n$ keys uses $O(n)$ space.
+
+\section{Proof}
+
+\begin{itemize}
+    \item Each key is stored exactly once: $n$ keys
+    \item Each node has at most $(2t-1)$ keys and $2t$ children pointers
+    \item Number of nodes: at most $\frac{n}{t-1} = O(n)$ when $t$ is constant
+    \item Total space:
+    \begin{align}
+    \text{Space} &= n \text{ keys} + O(n) \text{ pointers} \\
+    &= O(n) + O(n) \\
+    &= O(n)
+    \end{align}
+\end{itemize}
+
+\textbf{Conclusion:} B-Tree space complexity is $O(n)$.
+
+\section{Detailed Analysis}
+
+For a B-Tree of order $t$ with $n$ keys:
+\begin{itemize}
+    \item Minimum nodes: $\frac{n}{2t-1}$ (when all nodes are full)
+    \item Maximum nodes: $\frac{n}{t-1}$ (when nodes have minimum keys)
+    \item Each node stores: at most $(2t-1)$ keys and $2t$ pointers
+    \item Total storage: $O(n)$ keys + $O(n)$ pointers = $O(n)$
+\end{itemize}
+
+Since $t$ is typically a small constant (e.g., $t = 3$ to $t = 100$), the space overhead is linear in the number of keys.
+
+\end{document}

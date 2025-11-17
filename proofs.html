@@ -9,11 +9,28 @@ title: Algorithm Proofs
             <h1>Algorithm Complexity Proofs</h1>
             <p class="subtitle">Mathematical proofs with LaTeX and MathJax rendering</p>
             <p class="author">Copyright (C) 2025, Shyamal Suhana Chandra</p>
+            <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ '/' | relative_url }}" class="btn">🏠 Back to Home</a>
+                <a href="{{ '/COMPLEXITY_PROOFS.md' | relative_url }}" class="btn">📄 View Markdown Summary</a>
+                <a href="https://github.com/Sapana-Micro-Software/merry-go-round-splay-trees" class="btn" target="_blank">🔗 GitHub Repository</a>
+            </div>
         </header>
+
+        <!-- Quick Navigation -->
+        <div style="margin: 2rem 0; padding: 1.5rem; background: var(--bg-white); border-radius: var(--border-radius); box-shadow: var(--shadow);">
+            <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 1rem;">Quick Navigation</h3>
+            <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                <a href="#btree-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🌳 B-Tree Proofs</a>
+                <a href="#splay-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🔄 Splay Tree Proofs</a>
+                <a href="#rsync-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">📡 Rsync Proofs</a>
+                <a href="#thread-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🔒 Thread-Safe Proofs</a>
+            </div>
+        </div>
 
         <div class="proofs-accordion" id="proofsAccordion">
             
             <!-- B-Tree Proofs -->
+            <h2 id="btree-proofs" style="scroll-margin-top: 100px; color: var(--primary-color); margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary-color);">🌳 B-Tree Proofs</h2>
             <div class="accordion-item">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
                     <span class="accordion-title">B-Tree Height Complexity</span>
@@ -153,7 +170,44 @@ title: Algorithm Proofs
                 </div>
             </div>
 
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">B-Tree Space Complexity</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="proof-content">
+                        <h3>Theorem: B-Tree Space Complexity</h3>
+                        <p><strong>Statement:</strong> A B-Tree with $n$ keys uses $O(n)$ space.</p>
+                        
+                        <h4>Proof:</h4>
+                        <ul>
+                            <li>Each key is stored exactly once: $n$ keys</li>
+                            <li>Each node has at most $(2t-1)$ keys and $2t$ children pointers</li>
+                            <li>Number of nodes: at most $\frac{n}{t-1} = O(n)$ when $t$ is constant</li>
+                            <li>Total space:
+                                <div class="math-proof">
+                                    \begin{align}
+                                    \text{Space} &= n \text{ keys} + O(n) \text{ pointers} \\
+                                    &= O(n) + O(n) \\
+                                    &= O(n)
+                                    \end{align}
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <p><strong>Conclusion:</strong> B-Tree space complexity is $O(n)$.</p>
+                        
+                        <div class="proof-downloads">
+                            <a href="{{ '/proofs/btree-space.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
+                            <a href="{{ '/proofs/btree-space.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Splay Tree Proofs -->
+            <h2 id="splay-proofs" style="scroll-margin-top: 100px; color: var(--primary-color); margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary-color);">🔄 Splay Tree Proofs</h2>
             <div class="accordion-item">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
                     <span class="accordion-title">Splay Tree Amortized Complexity</span>
@@ -310,7 +364,59 @@ title: Algorithm Proofs
                 </div>
             </div>
 
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">N-Way Splay Tree Space Complexity</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="proof-content">
+                        <h3>Theorem: N-Way Splay Tree Space Complexity</h3>
+                        <p><strong>Statement:</strong> An N-way splay tree with $n$ nodes uses $O(n)$ space.</p>
+                        
+                        <h4>Proof:</h4>
+                        <p>Each node stores:</p>
+                        <ul>
+                            <li>1 key</li>
+                            <li>1 value</li>
+                            <li>At most $\text{maxChildren}$ pointers to children</li>
+                        </ul>
+                        
+                        <p>Number of nodes: $n$</p>
+                        <p>Total pointers: at most $n \times \text{maxChildren}$</p>
+                        
+                        <h5>Worst Case Analysis:</h5>
+                        <p>In worst case, $\text{maxChildren} = O(\sqrt{n})$ (by design constraint):</p>
+                        <div class="math-proof">
+                            \begin{align}
+                            \text{Total space} &= n \text{ keys} + n \text{ values} + n \times O(\sqrt{n}) \text{ pointers} \\
+                            &= O(n) + O(n) + O(n\sqrt{n}) \\
+                            &= O(n\sqrt{n})
+                            \end{align}
+                        </div>
+                        
+                        <h5>Average Case Analysis:</h5>
+                        <p>With dynamic branching adjustment, average branching factor is $O(1)$:</p>
+                        <div class="math-proof">
+                            \begin{align}
+                            \text{Amortized space} &= n \text{ keys} + n \text{ values} + n \times O(1) \text{ pointers} \\
+                            &= O(n) + O(n) + O(n) \\
+                            &= O(n)
+                            \end{align}
+                        </div>
+                        
+                        <p><strong>Conclusion:</strong> N-way splay tree has $O(n)$ average space complexity with dynamic branching, and $O(n\sqrt{n})$ worst-case space complexity.</p>
+                        
+                        <div class="proof-downloads">
+                            <a href="{{ '/proofs/splay-space.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
+                            <a href="{{ '/proofs/splay-space.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Rsync Proofs -->
+            <h2 id="rsync-proofs" style="scroll-margin-top: 100px; color: var(--primary-color); margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary-color);">📡 Rsync Proofs</h2>
             <div class="accordion-item">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
                     <span class="accordion-title">Rsync Block Matching Complexity</span>
@@ -373,11 +479,65 @@ title: Algorithm Proofs
                 </div>
             </div>
 
+            <!-- Multithreading Proofs -->
+            <h2 id="thread-proofs" style="scroll-margin-top: 100px; color: var(--primary-color); margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary-color);">🔒 Thread-Safe Proofs</h2>
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Thread-Safe Operation Overhead</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="proof-content">
+                        <h3>Theorem: Thread-Safe Operation Overhead</h3>
+                        <p><strong>Statement:</strong> Thread-safe operations add $O(1)$ overhead per operation in the uncontended case.</p>
+                        
+                        <h4>Proof:</h4>
+                        <p>Thread-safe operations involve:</p>
+                        <ul>
+                            <li>Mutex lock/unlock: $O(1)$ in uncontended case</li>
+                            <li>Atomic operations: $O(1)$</li>
+                            <li>Thread pool enqueue: $O(1)$ amortized</li>
+                        </ul>
+                        
+                        <h5>Uncontended Case:</h5>
+                        <div class="math-proof">
+                            \begin{align}
+                            \text{Overhead} &= \text{lock} + \text{operation} + \text{unlock} \\
+                            &= O(1) + O(1) + O(1) \\
+                            &= O(1)
+                            \end{align}
+                        </div>
+                        
+                        <h5>Contended Case:</h5>
+                        <p>When $k$ threads are waiting, lock acquisition is $O(k)$ worst case. However, with thread pool management, average overhead remains $O(1)$:</p>
+                        <div class="math-proof">
+                            \begin{align}
+                            \text{Amortized overhead} &= \frac{\text{Total overhead}}{\text{Number of operations}} \\
+                            &= \frac{O(n)}{n} \text{ (for $n$ operations)} \\
+                            &= O(1)
+                            \end{align}
+                        </div>
+                        
+                        <p><strong>Conclusion:</strong> Thread-safe operations add $O(1)$ overhead per operation in the average case. For tree operations with $O(\log n)$ complexity, the $O(1)$ thread-safety overhead is dominated by the operation itself.</p>
+                        
+                        <div class="proof-downloads">
+                            <a href="{{ '/proofs/thread-safe.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
+                            <a href="{{ '/proofs/thread-safe.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         
         <div class="proofs-footer">
             <p><strong>Copyright (C) 2025, Shyamal Suhana Chandra. All rights reserved.</strong></p>
             <p>All proofs are available in LaTeX (.tex) and PDF formats. PDFs are auto-generated via GitHub Actions.</p>
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ '/' | relative_url }}" class="btn">🏠 Back to Home</a>
+                <a href="{{ '/#complexity' | relative_url }}" class="btn">📊 View Complexity Table</a>
+                <a href="{{ '/#visualizations' | relative_url }}" class="btn">🌳 View Visualizations</a>
+            </div>
         </div>
     </div>
 </div>
@@ -392,8 +552,14 @@ function toggleAccordion(button) {
     // Close all accordion items
     document.querySelectorAll('.accordion-item').forEach(item => {
         item.classList.remove('active');
-        item.querySelector('.accordion-content').style.maxHeight = null;
-        item.querySelector('.accordion-icon').textContent = '▼';
+        const content = item.querySelector('.accordion-content');
+        if (content) {
+            content.style.maxHeight = null;
+        }
+        const icon = item.querySelector('.accordion-icon');
+        if (icon) {
+            icon.textContent = '▼';
+        }
     });
     
     // Open clicked item if it wasn't active
@@ -401,6 +567,44 @@ function toggleAccordion(button) {
         item.classList.add('active');
         content.style.maxHeight = content.scrollHeight + 'px';
         icon.textContent = '▲';
+        
+        // Trigger MathJax re-render after opening
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise([content]).catch(function (err) {
+                console.error('MathJax rendering error:', err);
+            });
+        }
     }
 }
+
+// Initialize MathJax after page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure MathJax processes the page
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(function (err) {
+            console.error('MathJax initial rendering error:', err);
+        });
+    }
+    
+    // Re-render MathJax when accordion opens
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                const target = mutation.target;
+                if (target.classList.contains('active')) {
+                    const content = target.querySelector('.accordion-content');
+                    if (content && window.MathJax && window.MathJax.typesetPromise) {
+                        window.MathJax.typesetPromise([content]).catch(function (err) {
+                            console.error('MathJax rendering error:', err);
+                        });
+                    }
+                }
+            }
+        });
+    });
+    
+    document.querySelectorAll('.accordion-item').forEach(item => {
+        observer.observe(item, { attributes: true });
+    });
+});
 </script>
