@@ -1,0 +1,36 @@
+title: "B-Tree & Dynamic N-Way Splay Tree"
+description: "High-performance tree data structures with GUI visualization"
+author: "Shyamal Suhana Chandra"
+copyright: "Copyright (C) 2025, Shyamal Suhana Chandra"
+
+# Jekyll settings
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Site settings
+url: "https://sapana-micro-software.github.io"
+baseurl: "/merry-go-round-splay-trees"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  syntax_highlighter: rouge
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git
+  - .gitignore
+  - README.md
+  - Makefile
+  - CMakeLists.txt
+  - "*.o"
+  - "*.dSYM"
+  - BTreeVisualizer
+  - NSplayTreeVisualizer

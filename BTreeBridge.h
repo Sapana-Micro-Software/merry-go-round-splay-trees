@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
+
 #ifndef BTREEBRIDGE_H
 #define BTREEBRIDGE_H
 

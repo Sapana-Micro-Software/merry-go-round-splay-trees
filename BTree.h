@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ * All rights reserved.
+ */
+
 #ifndef BTREE_H
 #define BTREE_H
 

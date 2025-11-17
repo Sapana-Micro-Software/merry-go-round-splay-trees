@@ -1,287 +1,198 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B-Tree and Dynamic N-Way Splay Tree</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 3rem;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        .project-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-        
-        .project-card h2 {
-            color: #667eea;
-            margin-bottom: 1rem;
-            font-size: 2rem;
-        }
-        
-        .project-card h3 {
-            color: #764ba2;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .project-card ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        
-        .project-card li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .project-card li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-        }
-        
-        .code-block {
-            background: #f4f4f4;
-            border-left: 4px solid #667eea;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-        }
-        
-        .features {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .features h2 {
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .feature-item {
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 3px solid #667eea;
-        }
-        
-        .feature-item strong {
-            color: #764ba2;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        
-        footer {
-            text-align: center;
-            color: white;
-            margin-top: 3rem;
-            padding: 2rem;
-            opacity: 0.9;
-        }
-        
-        .badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin: 0.2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .projects {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🌳 Tree Data Structures</h1>
-            <p class="subtitle">B-Tree and Dynamic N-Way Splay Tree with GUI Visualization</p>
-        </header>
-        
-        <div class="features">
-            <h2>Key Features</h2>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <strong>N-Way Branching</strong>
-                    Configurable branching factor (N ≥ 2, can approach infinity)
-                </div>
-                <div class="feature-item">
-                    <strong>Splay Optimization</strong>
-                    Frequently accessed nodes automatically move to root
-                </div>
-                <div class="feature-item">
-                    <strong>Multithreaded</strong>
-                    Thread-safe operations with worker thread pool
-                </div>
-                <div class="feature-item">
-                    <strong>Rsync Optimized</strong>
-                    Rolling checksums and block matching for file sync
-                </div>
-                <div class="feature-item">
-                    <strong>Real-time GUI</strong>
-                    Interactive macOS visualization with live updates
-                </div>
-                <div class="feature-item">
-                    <strong>Dynamic Adjustment</strong>
-                    Branching factor adapts based on subtree size
-                </div>
-            </div>
+---
+layout: default
+title: Home
+---
+    <div class="hero-section">
+        <div class="container">
+            <header class="hero-header">
+                <h1 class="hero-title">
+                    <span class="title-icon">🌳</span>
+                    Tree Data Structures
+                </h1>
+                <p class="hero-subtitle">B-Tree & Dynamic N-Way Splay Tree with Interactive Visualizations</p>
+                <p class="hero-author">Copyright (C) 2025, Shyamal Suhana Chandra</p>
+            </header>
         </div>
-        
-        <div class="projects">
-            <div class="project-card">
-                <h2>B-Tree with Splay Optimization</h2>
-                <p>A high-performance B-Tree implementation with splay-like optimizations for general-purpose data storage.</p>
-                
-                <h3>Features</h3>
-                <ul>
-                    <li>Configurable N-way branching (min degree ≥ 2)</li>
-                    <li>Splay-like node promotion for hot data</li>
-                    <li>Thread-safe operations with mutexes</li>
-                    <li>Real-time async operations with callbacks</li>
-                    <li>Interactive GUI visualization</li>
-                </ul>
-                
-                <h3>Build & Run</h3>
-                <div class="code-block">
-make<br>
-./BTreeVisualizer
-                </div>
-                
-                <div style="margin-top: 1rem;">
-                    <span class="badge">C++</span>
-                    <span class="badge">Objective-C</span>
-                    <span class="badge">macOS</span>
-                    <span class="badge">Multithreaded</span>
-                </div>
-            </div>
-            
-            <div class="project-card">
-                <h2>Dynamic N-Way Splay Tree</h2>
-                <p>Optimized for rsync-style file synchronization with dynamic branching and self-adjusting structure.</p>
-                
-                <h3>Features</h3>
-                <ul>
-                    <li>Dynamic N-way branching (2 to N, adaptive)</li>
-                    <li>Full splay operations (Zig, Zag, Zig-Zig, etc.)</li>
-                    <li>Rsync rolling checksums (Adler-32 variant)</li>
-                    <li>Block metadata and matching</li>
-                    <li>Real-time visualization with access counts</li>
-                </ul>
-                
-                <h3>Build & Run</h3>
-                <div class="code-block">
-make splay<br>
-./NSplayTreeVisualizer
-                </div>
-                
-                <div style="margin-top: 1rem;">
-                    <span class="badge">C++</span>
-                    <span class="badge">Objective-C</span>
-                    <span class="badge">Rsync</span>
-                    <span class="badge">Splay Tree</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="features">
-            <h2>Architecture</h2>
-            <div class="code-block">
-Core Implementation (C++ Templates)
-    ↓
-C Bridge Layer (C Interface)
-    ↓
-GUI Components (Objective-C/Cocoa)
-    ↓
-macOS Application
-            </div>
-            
-            <h3 style="margin-top: 1.5rem;">Performance Characteristics</h3>
-            <ul style="list-style: disc; padding-left: 2rem; margin-top: 1rem;">
-                <li><strong>B-Tree:</strong> O(log_t n) operations where t is min degree</li>
-                <li><strong>Splay Tree:</strong> O(log n) amortized, better for hot data</li>
-                <li><strong>Space:</strong> O(n) for both structures</li>
-                <li><strong>Thread Safety:</strong> Mutex-protected operations</li>
+    </div>
+
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#b-tree">B-Tree</a></li>
+                <li><a href="#splay-tree">Splay Tree</a></li>
+                <li><a href="#visualizations">Visualizations</a></li>
+                <li><a href="#complexity">Complexity</a></li>
+                <li><a href="#about">About</a></li>
             </ul>
         </div>
-        
-        <footer>
-            <p>Built with C++, Objective-C, and Cocoa for macOS</p>
-            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
-                <a href="https://github.com" style="color: white; text-decoration: underline;">View on GitHub</a>
+    </nav>
+
+    <main class="main-content">
+        <section id="b-tree" class="section">
+            <div class="container">
+                <h2 class="section-title">B-Tree with Splay Optimization</h2>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h3>Features</h3>
+                        <ul class="feature-list">
+                            <li>✓ Configurable N-way branching (min degree ≥ 2)</li>
+                            <li>✓ Splay-like node promotion for hot data</li>
+                            <li>✓ Thread-safe operations with mutexes</li>
+                            <li>✓ Real-time async operations with callbacks</li>
+                            <li>✓ Interactive macOS GUI visualization</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>make && ./BTreeVisualizer</code>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <h3>Complexity</h3>
+                        <ul class="complexity-list">
+                            <li><strong>Search:</strong> O(log n)</li>
+                            <li><strong>Insert:</strong> O(log n)</li>
+                            <li><strong>Delete:</strong> O(log n)</li>
+                            <li><strong>Space:</strong> O(n)</li>
+                        </ul>
+                        <a href="{{ '/COMPLEXITY_PROOFS.md' | relative_url }}" class="btn">View Proofs</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="splay-tree" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">Dynamic N-Way Splay Tree</h2>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h3>Rsync Optimized</h3>
+                        <ul class="feature-list">
+                            <li>✓ Dynamic N-way branching (2 to N, adaptive)</li>
+                            <li>✓ Full splay operations (Zig, Zag, Zig-Zig, etc.)</li>
+                            <li>✓ Rolling checksums (Adler-32 variant)</li>
+                            <li>✓ Block metadata and matching</li>
+                            <li>✓ Real-time visualization with access counts</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>make splay && ./NSplayTreeVisualizer</code>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <h3>Complexity</h3>
+                        <ul class="complexity-list">
+                            <li><strong>Search:</strong> O(log n) amortized</li>
+                            <li><strong>Insert:</strong> O(log n) amortized</li>
+                            <li><strong>Delete:</strong> O(log n) amortized</li>
+                            <li><strong>Space:</strong> O(n)</li>
+                        </ul>
+                        <a href="{{ '/COMPLEXITY_PROOFS.md' | relative_url }}" class="btn">View Proofs</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="visualizations" class="section">
+            <div class="container">
+                <h2 class="section-title">Interactive Visualizations</h2>
+                <div class="viz-container">
+                    <div class="viz-controls">
+                        <button id="btn-btree" class="viz-btn active">B-Tree</button>
+                        <button id="btn-splay" class="viz-btn">Splay Tree</button>
+                        <button id="btn-reset" class="viz-btn">Reset</button>
+                    </div>
+                    <canvas id="tree-canvas" width="1200" height="700"></canvas>
+                    <div class="viz-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Nodes:</span>
+                            <span id="stat-nodes" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Height:</span>
+                            <span id="stat-height" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Operations:</span>
+                            <span id="stat-ops" class="stat-value">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="complexity" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">Complexity Analysis</h2>
+                <div class="complexity-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>B-Tree</th>
+                                <th>N-Way Splay Tree</th>
+                                <th>Space</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Search</td>
+                                <td>O(log n)</td>
+                                <td>O(log n) amortized</td>
+                                <td rowspan="4">O(n)</td>
+                            </tr>
+                            <tr>
+                                <td>Insert</td>
+                                <td>O(log n)</td>
+                                <td>O(log n) amortized</td>
+                            </tr>
+                            <tr>
+                                <td>Delete</td>
+                                <td>O(log n)</td>
+                                <td>O(log n) amortized</td>
+                            </tr>
+                            <tr>
+                                <td>Sort</td>
+                                <td>O(n)</td>
+                                <td>O(n)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="proof-link">
+                    <a href="{{ '/COMPLEXITY_PROOFS.md' | relative_url }}" class="btn btn-large">View Detailed Proofs</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-title">About</h2>
+                <div class="about-content">
+                    <p>This project implements high-performance tree data structures with multithreaded operations and real-time GUI visualization for macOS.</p>
+                    <p><strong>Copyright (C) 2025, Shyamal Suhana Chandra. All rights reserved.</strong></p>
+                    <div class="tech-stack">
+                        <h3>Technology Stack</h3>
+                        <div class="tech-badges">
+                            <span class="badge">C++</span>
+                            <span class="badge">Objective-C</span>
+                            <span class="badge">TypeScript</span>
+                            <span class="badge">JavaScript</span>
+                            <span class="badge">Canvas API</span>
+                            <span class="badge">Jekyll</span>
+                            <span class="badge">GitHub Pages</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Copyright (C) 2025, Shyamal Suhana Chandra. All rights reserved.</p>
+            <p>
+                <a href="https://github.com/Sapana-Micro-Software/merry-go-round-splay-trees">GitHub Repository</a> |
+                <a href="{{ '/COMPLEXITY_PROOFS.md' | relative_url }}">Complexity Proofs</a>
             </p>
-        </footer>
-    </div>
-</body>
-</html>
+        </div>
+    </footer>
+
+    <script type="module" src="{{ '/assets/js/tree-visualizer.js' | relative_url }}"></script>
