@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Circular Buffer Splay Tree Search Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Circular Buffer Splay Tree Search Complexity}
+
+\textbf{Statement:} Searching in a Circular Buffer Splay Tree with $n$ nodes takes $O(\log n)$ amortized time.
+
+\section{Proof}
+
+The search operation consists of:
+\begin{enumerate}
+    \item Finding the node: $O(\log n)$ worst case (tree height)
+    \item Splay operation: $O(\log n)$ amortized (from standard splay tree analysis)
+    \item Buffer lookup: $O(1)$ (direct index access)
+\end{enumerate}
+
+\subsection{Splay Tree Search Analysis}
+
+Using the potential method with potential function:
+\[ \Phi(T) = \sum_{v \in T} \log(\text{size}(v)) \]
+
+where $\text{size}(v)$ = number of nodes in subtree rooted at $v$.
+
+For a search operation:
+\begin{align}
+\text{Amortized cost} &= \text{Actual cost} + \Delta\Phi \\
+&= O(\log n) + O(\log n) \\
+&= O(\log n)
+\end{align}
+
+\subsection{Circular Buffer Overhead}
+
+The circular buffer adds $O(1)$ overhead:
+\begin{itemize}
+    \item Buffer index access: $O(1)$
+    \item Node allocation/deallocation: $O(1)$
+    \item LRU eviction: $O(1)$ per operation (amortized)
+\end{itemize}
+
+\subsection{Total Complexity}
+
+\begin{align}
+T(n) &= \text{Find node} + \text{Splay} + \text{Buffer operations} \\
+&= O(\log n) + O(\log n) + O(1) \\
+&= O(\log n) \text{ amortized}
+\end{align}
+
+\textbf{Conclusion:} Circular Buffer Splay Tree search has $O(\log n)$ amortized time complexity.
+
+\section{Best Case}
+
+When the searched node is at the root: $O(1)$
+
+\section{Worst Case}
+
+When the tree is a linear chain: $O(n)$ for a single operation, but amortized over a sequence of operations: $O(\log n)$
+
+\end{document}

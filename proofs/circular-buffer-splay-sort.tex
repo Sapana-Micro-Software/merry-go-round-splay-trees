@@ -1,0 +1,107 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Circular Buffer Splay Tree Sort Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Circular Buffer Splay Tree Sort Complexity}
+
+\textbf{Statement:} Sorting a Circular Buffer Splay Tree with $n$ nodes takes $O(n)$ time for both ascending and descending order, regardless of comparison mode (lexicographic, numeric, or semantic).
+
+\section{Proof}
+
+The sort operation performs an in-order traversal of the tree:
+\begin{enumerate}
+    \item Visit all nodes: $O(n)$
+    \item Comparison per node: $O(1)$ (for all modes)
+    \item Build result vector: $O(n)$
+\end{enumerate}
+
+\subsection{In-Order Traversal}
+
+In-order traversal visits each node exactly once:
+\[ T(n) = T(k) + T(n-k-1) + O(1) \]
+
+where $k$ is the size of the left subtree.
+
+Solving the recurrence:
+\[ T(n) = O(n) \]
+
+\subsection{Comparison Modes}
+
+\subsubsection{Lexicographic Mode}
+\begin{itemize}
+    \item String comparison: $O(\min(|a|, |b|))$ where $|a|, |b|$ are string lengths
+    \item For fixed-size keys: $O(1)$
+    \item For variable-size keys: $O(k)$ where $k$ is average key length
+    \item Total: $O(n \cdot k)$ where $k$ is key length
+\end{itemize}
+
+\subsubsection{Numeric Mode}
+\begin{itemize}
+    \item Numeric comparison: $O(1)$
+    \item Total: $O(n)$
+\end{itemize}
+
+\subsubsection{Semantic Mode}
+\begin{itemize}
+    \item Custom comparison: Depends on comparator
+    \item Assuming $O(1)$ comparator: $O(n)$
+    \item With $O(k)$ comparator: $O(n \cdot k)$
+\end{itemize}
+
+\subsection{Sort Order}
+
+\subsubsection{Ascending Order}
+Traverse: left $\rightarrow$ node $\rightarrow$ right
+\[ \text{Time} = O(n) \]
+
+\subsubsection{Descending Order}
+Traverse: right $\rightarrow$ node $\rightarrow$ left
+\[ \text{Time} = O(n) \]
+
+The order only affects traversal direction, not complexity.
+
+\subsection{Total Complexity}
+
+For fixed-size keys or $O(1)$ comparators:
+\begin{align}
+T(n) &= \text{Traversal} + \text{Comparisons} + \text{Result building} \\
+&= O(n) + O(n) + O(n) \\
+&= O(n)
+\end{align}
+
+For variable-size keys with lexicographic comparison:
+\[ T(n) = O(n \cdot k) \]
+
+where $k$ is the average key length.
+
+\textbf{Conclusion:} Circular Buffer Splay Tree sort has $O(n)$ time complexity for fixed-size keys, and $O(n \cdot k)$ for variable-size keys where $k$ is the key length.
+
+\section{Space Complexity}
+
+The sort operation requires:
+\begin{itemize}
+    \item Result vector: $O(n)$
+    \item Recursion stack: $O(h) = O(\log n)$ average, $O(n)$ worst case
+    \item Total: $O(n)$
+\end{itemize}
+
+\section{Comparison with Other Sorting Methods}
+
+\begin{itemize}
+    \item \textbf{Heap Sort}: $O(n \log n)$ - slower but in-place
+    \item \textbf{Quick Sort}: $O(n \log n)$ average - faster but not stable
+    \item \textbf{CBS Tree Sort}: $O(n)$ - fastest for already-built tree
+\end{itemize}
+
+The advantage of CBS Tree Sort is that the tree is already maintained, so sorting is just a traversal operation.
+
+\end{document}

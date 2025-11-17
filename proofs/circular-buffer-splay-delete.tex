@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Circular Buffer Splay Tree Delete Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Circular Buffer Splay Tree Delete Complexity}
+
+\textbf{Statement:} Deleting from a Circular Buffer Splay Tree with $n$ nodes takes $O(\log n)$ amortized time.
+
+\section{Proof}
+
+The delete operation consists of:
+\begin{enumerate}
+    \item Find node to delete: $O(\log n)$
+    \item Splay node to root: $O(\log n)$ amortized
+    \item Delete node: $O(\log n)$ worst case
+    \item Deallocate from buffer: $O(1)$
+\end{enumerate}
+
+\subsection{Deletion Cases}
+
+\subsubsection{Case 1: Leaf Node}
+\begin{itemize}
+    \item Remove from parent: $O(1)$
+    \item Update subtree sizes: $O(\log n)$ (path to root)
+    \item Deallocate: $O(1)$
+    \item Total: $O(\log n)$
+\end{itemize}
+
+\subsubsection{Case 2: One Child}
+\begin{itemize}
+    \item Replace with child: $O(1)$
+    \item Update subtree sizes: $O(\log n)$
+    \item Deallocate: $O(1)$
+    \item Total: $O(\log n)$
+\end{itemize}
+
+\subsubsection{Case 3: Two Children}
+\begin{itemize}
+    \item Find successor: $O(\log n)$ (height of right subtree)
+    \item Replace node with successor: $O(1)$
+    \item Remove successor: $O(\log n)$ (recursive)
+    \item Update subtree sizes: $O(\log n)$
+    \item Deallocate: $O(1)$
+    \item Total: $O(\log n)$
+\end{itemize}
+
+\subsection{Splay Operation}
+
+Splaying the node to root before deletion:
+\[ \text{Amortized cost} = O(\log n) \]
+
+\subsection{Buffer Deallocation}
+
+Deallocating from circular buffer:
+\begin{itemize}
+    \item Clear buffer slot: $O(1)$
+    \item Update size counter: $O(1)$
+    \item Total: $O(1)$
+\end{itemize}
+
+\subsection{Total Complexity}
+
+\begin{align}
+T(n) &= \text{Find} + \text{Splay} + \text{Delete} + \text{Deallocate} \\
+&= O(\log n) + O(\log n) + O(\log n) + O(1) \\
+&= O(\log n) \text{ amortized}
+\end{align}
+
+\textbf{Conclusion:} Circular Buffer Splay Tree delete has $O(\log n)$ amortized time complexity.
+
+\section{Worst Case}
+
+In the worst case (linear tree), a single deletion may take $O(n)$, but amortized over a sequence of operations, the complexity is $O(\log n)$.
+
+\end{document}

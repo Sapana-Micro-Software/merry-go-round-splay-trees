@@ -22,6 +22,7 @@ title: Algorithm Proofs
             <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
                 <a href="#btree-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🌳 B-Tree Proofs</a>
                 <a href="#splay-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🔄 Splay Tree Proofs</a>
+                <a href="#circular-buffer-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🔄 Circular Buffer Proofs</a>
                 <a href="#rsync-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">📡 Rsync Proofs</a>
                 <a href="#thread-proofs" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🔒 Thread-Safe Proofs</a>
             </div>
@@ -474,6 +475,172 @@ title: Algorithm Proofs
                         <div class="proof-downloads">
                             <a href="{{ '/proofs/rsync-construction.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
                             <a href="{{ '/proofs/rsync-construction.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circular Buffer Splay Tree Proofs -->
+            <h2 id="circular-buffer-proofs" style="scroll-margin-top: 100px; color: var(--primary-color); margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary-color);">🔄 Circular Buffer Splay Tree Proofs</h2>
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Circular Buffer Splay Tree Search Complexity</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="proof-content">
+                        <h3>Theorem: Circular Buffer Splay Tree Search Complexity</h3>
+                        <p><strong>Statement:</strong> Searching in a Circular Buffer Splay Tree with $n$ nodes takes $O(\log n)$ amortized time.</p>
+                        
+                        <h4>Proof:</h4>
+                        <p>The search operation consists of:</p>
+                        <ol>
+                            <li>Finding the node: $O(\log n)$ worst case (tree height)</li>
+                            <li>Splay operation: $O(\log n)$ amortized (from standard splay tree analysis)</li>
+                            <li>Buffer lookup: $O(1)$ (direct index access)</li>
+                        </ol>
+                        
+                        <div class="math-proof">
+                            \begin{align}
+                            T(n) &= \text{Find node} + \text{Splay} + \text{Buffer operations} \\
+                            &= O(\log n) + O(\log n) + O(1) \\
+                            &= O(\log n) \text{ amortized}
+                            \end{align}
+                        </div>
+                        
+                        <p><strong>Conclusion:</strong> Circular Buffer Splay Tree search has $O(\log n)$ amortized time complexity.</p>
+                        
+                        <div class="proof-downloads">
+                            <a href="{{ '/proofs/circular-buffer-splay-search.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
+                            <a href="{{ '/proofs/circular-buffer-splay-search.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Circular Buffer Splay Tree Insert Complexity</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="proof-content">
+                        <h3>Theorem: Circular Buffer Splay Tree Insert Complexity</h3>
+                        <p><strong>Statement:</strong> Inserting into a Circular Buffer Splay Tree with $n$ nodes takes $O(\log n)$ amortized time.</p>
+                        
+                        <h4>Proof:</h4>
+                        <p>The insert operation consists of:</p>
+                        <ol>
+                            <li>Find insertion point: $O(\log n)$</li>
+                            <li>Allocate node from buffer: $O(1)$</li>
+                            <li>Insert node: $O(1)$</li>
+                            <li>Splay new node to root: $O(\log n)$ amortized</li>
+                            <li>Handle buffer overflow (if needed): $O(1)$ amortized</li>
+                        </ol>
+                        
+                        <div class="math-proof">
+                            \begin{align}
+                            T(n) &= \text{Find} + \text{Allocate} + \text{Insert} + \text{Splay} + \text{Overflow} \\
+                            &= O(\log n) + O(1) + O(1) + O(\log n) + O(1) \\
+                            &= O(\log n) \text{ amortized}
+                            \end{align}
+                        </div>
+                        
+                        <p><strong>Conclusion:</strong> Circular Buffer Splay Tree insert has $O(\log n)$ amortized time complexity.</p>
+                        
+                        <div class="proof-downloads">
+                            <a href="{{ '/proofs/circular-buffer-splay-insert.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
+                            <a href="{{ '/proofs/circular-buffer-splay-insert.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Circular Buffer Splay Tree Delete Complexity</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="proof-content">
+                        <h3>Theorem: Circular Buffer Splay Tree Delete Complexity</h3>
+                        <p><strong>Statement:</strong> Deleting from a Circular Buffer Splay Tree with $n$ nodes takes $O(\log n)$ amortized time.</p>
+                        
+                        <h4>Proof:</h4>
+                        <p>The delete operation consists of:</p>
+                        <ol>
+                            <li>Find node to delete: $O(\log n)$</li>
+                            <li>Splay node to root: $O(\log n)$ amortized</li>
+                            <li>Delete node: $O(\log n)$ worst case</li>
+                            <li>Deallocate from buffer: $O(1)$</li>
+                        </ol>
+                        
+                        <div class="math-proof">
+                            \begin{align}
+                            T(n) &= \text{Find} + \text{Splay} + \text{Delete} + \text{Deallocate} \\
+                            &= O(\log n) + O(\log n) + O(\log n) + O(1) \\
+                            &= O(\log n) \text{ amortized}
+                            \end{align}
+                        </div>
+                        
+                        <p><strong>Conclusion:</strong> Circular Buffer Splay Tree delete has $O(\log n)$ amortized time complexity.</p>
+                        
+                        <div class="proof-downloads">
+                            <a href="{{ '/proofs/circular-buffer-splay-delete.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
+                            <a href="{{ '/proofs/circular-buffer-splay-delete.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Circular Buffer Splay Tree Sort Complexity</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="proof-content">
+                        <h3>Theorem: Circular Buffer Splay Tree Sort Complexity</h3>
+                        <p><strong>Statement:</strong> Sorting a Circular Buffer Splay Tree with $n$ nodes takes $O(n)$ time for both ascending and descending order, regardless of comparison mode (lexicographic, numeric, or semantic).</p>
+                        
+                        <h4>Proof:</h4>
+                        <p>The sort operation performs an in-order traversal:</p>
+                        <ol>
+                            <li>Visit all nodes: $O(n)$</li>
+                            <li>Comparison per node: $O(1)$ for fixed-size keys, $O(k)$ for variable-size keys</li>
+                            <li>Build result vector: $O(n)$</li>
+                        </ol>
+                        
+                        <h5>For fixed-size keys or $O(1)$ comparators:</h5>
+                        <div class="math-proof">
+                            \begin{align}
+                            T(n) &= \text{Traversal} + \text{Comparisons} + \text{Result building} \\
+                            &= O(n) + O(n) + O(n) \\
+                            &= O(n)
+                            \end{align}
+                        </div>
+                        
+                        <h5>For variable-size keys with lexicographic comparison:</h5>
+                        <p>$T(n) = O(n \cdot k)$ where $k$ is the average key length.</p>
+                        
+                        <h5>Sort Order:</h5>
+                        <ul>
+                            <li><strong>Ascending:</strong> Traverse left $\rightarrow$ node $\rightarrow$ right: $O(n)$</li>
+                            <li><strong>Descending:</strong> Traverse right $\rightarrow$ node $\rightarrow$ left: $O(n)$</li>
+                        </ul>
+                        
+                        <h5>Comparison Modes:</h5>
+                        <ul>
+                            <li><strong>Lexicographic:</strong> $O(n \cdot k)$ where $k$ is key length</li>
+                            <li><strong>Numeric:</strong> $O(n)$</li>
+                            <li><strong>Semantic:</strong> Depends on comparator, typically $O(n)$ or $O(n \cdot k)$</li>
+                        </ul>
+                        
+                        <p><strong>Conclusion:</strong> Circular Buffer Splay Tree sort has $O(n)$ time complexity for fixed-size keys, and $O(n \cdot k)$ for variable-size keys where $k$ is the key length.</p>
+                        
+                        <div class="proof-downloads">
+                            <a href="{{ '/proofs/circular-buffer-splay-sort.tex' | relative_url }}" download class="btn-download">📄 Download LaTeX</a>
+                            <a href="{{ '/proofs/circular-buffer-splay-sort.pdf' | relative_url }}" class="btn-download" target="_blank">📕 View PDF</a>
                         </div>
                     </div>
                 </div>

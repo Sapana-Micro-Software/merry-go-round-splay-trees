@@ -23,6 +23,7 @@ title: Home
             <ul class="nav-list">
                 <li><a href="#b-tree">B-Tree</a></li>
                 <li><a href="#splay-tree">Splay Tree</a></li>
+                <li><a href="#circular-buffer-splay">Circular Buffer</a></li>
                 <li><a href="#visualizations">Visualizations</a></li>
                 <li><a href="#complexity">Complexity</a></li>
                 <li><a href="{{ '/proofs.html' | relative_url }}">Proofs</a></li>
@@ -94,7 +95,57 @@ title: Home
             </div>
         </section>
 
-        <section id="visualizations" class="section">
+        <section id="circular-buffer-splay" class="section">
+            <div class="container">
+                <h2 class="section-title">Circular Buffer Splay Tree</h2>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h3>Features</h3>
+                        <ul class="feature-list">
+                            <li>✓ Fixed-size circular buffer for memory efficiency</li>
+                            <li>✓ Self-adjusting splay tree operations</li>
+                            <li>✓ Multiple sorting modes (lexicographic, numeric, semantic)</li>
+                            <li>✓ Ascending and descending sort support</li>
+                            <li>✓ LRU eviction policy when buffer is full</li>
+                            <li>✓ Thread-safe operations with mutex locks</li>
+                        </ul>
+                        <div class="code-block">
+                            <code>#include "CircularBufferSplayTree.h"</code>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <h3>Complexity</h3>
+                        <ul class="complexity-list">
+                            <li><strong>Search:</strong> O(log n) amortized</li>
+                            <li><strong>Insert:</strong> O(log n) amortized</li>
+                            <li><strong>Delete:</strong> O(log n) amortized</li>
+                            <li><strong>Sort:</strong> O(n) or O(n·k) for variable keys</li>
+                            <li><strong>Space:</strong> O(bufferSize)</li>
+                        </ul>
+                        <a href="{{ '/proofs.html' | relative_url }}" class="btn">View Proofs</a>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-white); border-radius: var(--border-radius); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Sorting Modes</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div>
+                            <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">📝 Lexicographic</h4>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">String-based alphabetical comparison for text data</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">🔢 Numeric</h4>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">Standard numeric comparison for integer/float keys</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">🧠 Semantic</h4>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">Custom comparison function for domain-specific ordering</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="visualizations" class="section section-alt">
             <div class="container">
                 <h2 class="section-title">Interactive Visualizations</h2>
                 <div class="viz-container">
@@ -132,6 +183,7 @@ title: Home
                                 <th>Operation</th>
                                 <th>B-Tree</th>
                                 <th>N-Way Splay Tree</th>
+                                <th>Circular Buffer Splay</th>
                                 <th>Space</th>
                             </tr>
                         </thead>
@@ -140,22 +192,32 @@ title: Home
                                 <td>Search</td>
                                 <td>O(log n)</td>
                                 <td>O(log n) amortized</td>
-                                <td rowspan="4">O(n)</td>
+                                <td>O(log n) amortized</td>
+                                <td rowspan="5">O(n)</td>
                             </tr>
                             <tr>
                                 <td>Insert</td>
                                 <td>O(log n)</td>
+                                <td>O(log n) amortized</td>
                                 <td>O(log n) amortized</td>
                             </tr>
                             <tr>
                                 <td>Delete</td>
                                 <td>O(log n)</td>
                                 <td>O(log n) amortized</td>
+                                <td>O(log n) amortized</td>
                             </tr>
                             <tr>
-                                <td>Sort</td>
+                                <td>Sort (Asc/Desc)</td>
                                 <td>O(n)</td>
                                 <td>O(n)</td>
+                                <td>O(n) or O(n·k)</td>
+                            </tr>
+                            <tr>
+                                <td>Sort Modes</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>Lex/Num/Sem</td>
                             </tr>
                         </tbody>
                     </table>

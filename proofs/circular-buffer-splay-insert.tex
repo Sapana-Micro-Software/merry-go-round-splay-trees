@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Circular Buffer Splay Tree Insert Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Circular Buffer Splay Tree Insert Complexity}
+
+\textbf{Statement:} Inserting into a Circular Buffer Splay Tree with $n$ nodes takes $O(\log n)$ amortized time.
+
+\section{Proof}
+
+The insert operation consists of:
+\begin{enumerate}
+    \item Find insertion point: $O(\log n)$
+    \item Allocate node from buffer: $O(1)$
+    \item Insert node: $O(1)$
+    \item Splay new node to root: $O(\log n)$ amortized
+    \item Handle buffer overflow (if needed): $O(\log n)$ amortized
+\end{enumerate}
+
+\subsection{Insertion Analysis}
+
+Finding the insertion point requires traversing from root to leaf:
+\[ \text{Height} \leq \log_2(n+1) = O(\log n) \]
+
+\subsection{Buffer Allocation}
+
+Buffer allocation is $O(1)$:
+\begin{itemize}
+    \item Index calculation: $O(1)$
+    \item Node creation: $O(1)$
+    \item Buffer update: $O(1)$
+\end{itemize}
+
+\subsection{Buffer Overflow Handling}
+
+When buffer is full ($n = \text{bufferSize}$):
+\begin{itemize}
+    \item Find LRU node: $O(1)$ (using circular index)
+    \item Remove LRU node: $O(\log n)$ (tree deletion)
+    \item Occurs at most once per buffer size insertions
+    \item Amortized cost: $\frac{O(\log n)}{\text{bufferSize}} = O(1)$ per insertion
+\end{itemize}
+
+\subsection{Splay Operation}
+
+Splaying the newly inserted node to root:
+\[ \text{Amortized cost} = O(\log n) \]
+
+\subsection{Total Complexity}
+
+\begin{align}
+T(n) &= \text{Find} + \text{Allocate} + \text{Insert} + \text{Splay} + \text{Overflow} \\
+&= O(\log n) + O(1) + O(1) + O(\log n) + O(1) \\
+&= O(\log n) \text{ amortized}
+\end{align}
+
+\textbf{Conclusion:} Circular Buffer Splay Tree insert has $O(\log n)$ amortized time complexity.
+
+\section{Space Complexity}
+
+Since the buffer size is fixed:
+\[ \text{Space} = O(\text{bufferSize}) = O(1) \text{ per node} \]
+
+Total space: $O(n)$ where $n \leq \text{bufferSize}$.
+
+\end{document}
