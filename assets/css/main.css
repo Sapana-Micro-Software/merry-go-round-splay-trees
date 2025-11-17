@@ -261,6 +261,34 @@ body > * {
     color: var(--primary-color);
     margin-bottom: 2rem;
     text-align: center;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    border-radius: 2px;
+    animation: expand-line 1s ease-out;
+}
+
+@keyframes expand-line {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100px;
+    }
 }
 
 /* Project Grid */
@@ -335,13 +363,33 @@ body > * {
 }
 
 .code-block {
-    background: #f4f4f4;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-left: 4px solid var(--primary-color);
+    border-right: 2px solid rgba(102, 126, 234, 0.1);
     padding: 1rem;
     margin: 1rem 0;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: 'Courier New', monospace;
     overflow-x: auto;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+}
+
+.code-block:hover {
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+    transform: translateX(5px);
+    border-left-width: 6px;
+}
+
+.code-block::before {
+    content: '>';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: var(--primary-color);
+    font-weight: bold;
+    opacity: 0.5;
 }
 
 .code-block code {
@@ -888,6 +936,23 @@ body > * {
 .nav-list a {
     position: relative;
     overflow: hidden;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.nav-list a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.nav-list a:hover::before {
+    left: 100%;
 }
 
 .nav-list a::after {
@@ -897,8 +962,11 @@ body > * {
     left: 0;
     width: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    background-size: 200% 100%;
+    animation: gradient-shift 2s ease infinite;
     transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
 }
 
 .nav-list a:hover::after {
@@ -926,14 +994,23 @@ body > * {
 
 /* Glowing Effects */
 .complexity-table th {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+    box-shadow: 
+        0 0 20px rgba(102, 126, 234, 0.5),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    color: white !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .complexity-table tr:hover {
-    background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    transform: scale(1.01);
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15), rgba(240, 147, 251, 0.1));
+    transform: scale(1.02) translateX(5px);
     transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
 }
 
 /* Code Block Enhancements */
@@ -1048,11 +1125,28 @@ body > * {
     animation: float-slow 4s ease-in-out infinite;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     transition: var(--transition);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    color: white !important;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .badge:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    transform: translateY(-5px) scale(1.1) rotateZ(5deg);
+    box-shadow: 
+        0 8px 25px rgba(102, 126, 234, 0.5),
+        0 0 20px rgba(102, 126, 234, 0.4);
+    animation: float-slow 2s ease-in-out infinite, badge-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes badge-glow {
+    0%, 100% {
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5), 0 0 20px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.7), 0 0 30px rgba(102, 126, 234, 0.6);
+    }
 }
 
 /* Advanced Neon Glow Animations */
