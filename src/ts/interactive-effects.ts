@@ -14,7 +14,7 @@ export class InteractiveEffects {
 
     private static addRippleEffects(): void {
         document.querySelectorAll('.btn, .project-card, .accordion-header').forEach(element => {
-            element.addEventListener('click', function(e) {
+            element.addEventListener('click', function(this: HTMLElement, e: MouseEvent) {
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
@@ -60,7 +60,9 @@ export class InteractiveEffects {
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.section, .project-card').forEach(el => {
-            observer.observe(el);
+            if (el instanceof HTMLElement) {
+                observer.observe(el);
+            }
         });
     }
 
