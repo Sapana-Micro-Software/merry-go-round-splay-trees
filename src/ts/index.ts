@@ -6,6 +6,7 @@
 
 import { PageAnimations } from './page-animations';
 import { CanvasBackground } from './canvas-background';
+import './interactive-effects';
 
 // Enhanced visualizer initializes itself
 import './enhanced-visualizer';

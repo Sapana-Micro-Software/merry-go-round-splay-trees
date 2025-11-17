@@ -863,6 +863,87 @@ body > * {
     100% { left: 100%; }
 }
 
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+}
+
+.revealed {
+    animation: slideInUp 0.8s ease-out;
+}
+
+/* 3D Card Effects */
+.project-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.project-card:hover {
+    transform: translateY(-8px) scale(1.02) rotateX(2deg);
+}
+
+/* Neon Glow Effects */
+.hero-title {
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(102, 126, 234, 0.5);
+}
+
+/* Magnetic Hover Effect */
+.nav-list a, .btn {
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.nav-list a:hover, .btn:hover {
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* Glassmorphism */
+.main-nav {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animated Gradient Text */
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 3s ease infinite;
+}
+
+/* Floating Badges */
+.badge {
+    animation: float-slow 4s ease-in-out infinite;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: var(--transition);
+}
+
+.badge:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-title {
