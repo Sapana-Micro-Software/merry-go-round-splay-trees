@@ -209,7 +209,7 @@ body > * {
 }
 
 .nav-list a {
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
     text-decoration: none;
     font-weight: 500;
     padding: 0.5rem 1rem;
@@ -219,7 +219,7 @@ body > * {
 
 .nav-list a:hover {
     background: var(--primary-color);
-    color: white;
+    color: white !important;
 }
 
 /* Sections */
@@ -321,7 +321,7 @@ body > * {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     background-size: 200% 200%;
     animation: gradient-shift 3s ease infinite;
-    color: white;
+    color: white !important;
     padding: 0.75rem 1.5rem;
     border-radius: 6px;
     text-decoration: none;
@@ -332,6 +332,14 @@ body > * {
     position: relative;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Ensure button text is always visible */
+.btn,
+.btn:visited,
+.btn:link {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .btn::before {
@@ -386,7 +394,7 @@ body > * {
     padding: 0.75rem 1.5rem;
     border: 2px solid var(--primary-color);
     background: white;
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 500;
@@ -395,12 +403,12 @@ body > * {
 
 .viz-btn:hover {
     background: var(--primary-color);
-    color: white;
+    color: white !important;
 }
 
 .viz-btn.active {
     background: var(--primary-color);
-    color: white;
+    color: white !important;
 }
 
 #tree-canvas {
@@ -542,11 +550,12 @@ body > * {
 }
 
 .footer a {
-    color: var(--accent-color);
+    color: var(--accent-color) !important;
     text-decoration: none;
 }
 
 .footer a:hover {
+    color: var(--primary-color) !important;
     text-decoration: underline;
 }
 
@@ -691,15 +700,17 @@ body > * {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     background: var(--secondary-color);
-    color: white;
+    color: white !important;
     text-decoration: none;
     border-radius: 6px;
     font-weight: 500;
     transition: var(--transition);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .btn-download:hover {
     background: var(--primary-color);
+    color: white !important;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
 }
