@@ -6,13 +6,18 @@ on:
       - 'proofs/*.tex'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-pdfs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Install LaTeX
         run: |
           sudo apt-get update
@@ -32,8 +37,12 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add proofs/*.pdf || echo "No PDFs to add"
-          git commit -m "Auto-generate PDF proofs" || echo "No changes to commit"
-          git push || echo "Nothing to push"
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-generate PDF proofs [skip ci]"
+            git push
+          fi
           
       - name: Upload PDFs as artifact
         uses: actions/upload-artifact@v4
