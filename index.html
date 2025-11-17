@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B-Tree and Dynamic N-Way Splay Tree</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .project-card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        
+        .project-card h3 {
+            color: #764ba2;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .project-card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .project-card li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #f4f4f4;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .features {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .features h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .feature-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .feature-item strong {
+            color: #764ba2;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 3rem;
+            padding: 2rem;
+            opacity: 0.9;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .projects {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌳 Tree Data Structures</h1>
+            <p class="subtitle">B-Tree and Dynamic N-Way Splay Tree with GUI Visualization</p>
+        </header>
+        
+        <div class="features">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <strong>N-Way Branching</strong>
+                    Configurable branching factor (N ≥ 2, can approach infinity)
+                </div>
+                <div class="feature-item">
+                    <strong>Splay Optimization</strong>
+                    Frequently accessed nodes automatically move to root
+                </div>
+                <div class="feature-item">
+                    <strong>Multithreaded</strong>
+                    Thread-safe operations with worker thread pool
+                </div>
+                <div class="feature-item">
+                    <strong>Rsync Optimized</strong>
+                    Rolling checksums and block matching for file sync
+                </div>
+                <div class="feature-item">
+                    <strong>Real-time GUI</strong>
+                    Interactive macOS visualization with live updates
+                </div>
+                <div class="feature-item">
+                    <strong>Dynamic Adjustment</strong>
+                    Branching factor adapts based on subtree size
+                </div>
+            </div>
+        </div>
+        
+        <div class="projects">
+            <div class="project-card">
+                <h2>B-Tree with Splay Optimization</h2>
+                <p>A high-performance B-Tree implementation with splay-like optimizations for general-purpose data storage.</p>
+                
+                <h3>Features</h3>
+                <ul>
+                    <li>Configurable N-way branching (min degree ≥ 2)</li>
+                    <li>Splay-like node promotion for hot data</li>
+                    <li>Thread-safe operations with mutexes</li>
+                    <li>Real-time async operations with callbacks</li>
+                    <li>Interactive GUI visualization</li>
+                </ul>
+                
+                <h3>Build & Run</h3>
+                <div class="code-block">
+make<br>
+./BTreeVisualizer
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <span class="badge">C++</span>
+                    <span class="badge">Objective-C</span>
+                    <span class="badge">macOS</span>
+                    <span class="badge">Multithreaded</span>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <h2>Dynamic N-Way Splay Tree</h2>
+                <p>Optimized for rsync-style file synchronization with dynamic branching and self-adjusting structure.</p>
+                
+                <h3>Features</h3>
+                <ul>
+                    <li>Dynamic N-way branching (2 to N, adaptive)</li>
+                    <li>Full splay operations (Zig, Zag, Zig-Zig, etc.)</li>
+                    <li>Rsync rolling checksums (Adler-32 variant)</li>
+                    <li>Block metadata and matching</li>
+                    <li>Real-time visualization with access counts</li>
+                </ul>
+                
+                <h3>Build & Run</h3>
+                <div class="code-block">
+make splay<br>
+./NSplayTreeVisualizer
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <span class="badge">C++</span>
+                    <span class="badge">Objective-C</span>
+                    <span class="badge">Rsync</span>
+                    <span class="badge">Splay Tree</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <h2>Architecture</h2>
+            <div class="code-block">
+Core Implementation (C++ Templates)
+    ↓
+C Bridge Layer (C Interface)
+    ↓
+GUI Components (Objective-C/Cocoa)
+    ↓
+macOS Application
+            </div>
+            
+            <h3 style="margin-top: 1.5rem;">Performance Characteristics</h3>
+            <ul style="list-style: disc; padding-left: 2rem; margin-top: 1rem;">
+                <li><strong>B-Tree:</strong> O(log_t n) operations where t is min degree</li>
+                <li><strong>Splay Tree:</strong> O(log n) amortized, better for hot data</li>
+                <li><strong>Space:</strong> O(n) for both structures</li>
+                <li><strong>Thread Safety:</strong> Mutex-protected operations</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Built with C++, Objective-C, and Cocoa for macOS</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                <a href="https://github.com" style="color: white; text-decoration: underline;">View on GitHub</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

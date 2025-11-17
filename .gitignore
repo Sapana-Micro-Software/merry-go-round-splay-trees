@@ -1,0 +1,17 @@
+# Build artifacts
+*.o
+*.dSYM
+BTreeVisualizer
+NSplayTreeVisualizer
+
+# IDE files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build directories
+build/
+cmake-build-*/
