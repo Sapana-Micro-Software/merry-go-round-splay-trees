@@ -15,3 +15,7 @@ NSplayTreeVisualizer
 # Build directories
 build/
 cmake-build-*/
+
+# Node modules
+node_modules/
+package-lock.json
