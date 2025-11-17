@@ -6,6 +6,9 @@
 
 import { PageAnimations } from './page-animations';
 import { CanvasBackground } from './canvas-background';
+import { AdvancedEffects } from './advanced-effects';
+import { TypingAnimation } from './typing-animation';
+import { ThreeDEffects } from './3d-effects';
 import './interactive-effects';
 
 // Enhanced visualizer initializes itself
@@ -20,4 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (bgCanvas) {
         new CanvasBackground('background-canvas');
     }
+
+    // Initialize advanced effects
+    new AdvancedEffects();
+    new TypingAnimation();
+    new ThreeDEffects();
 });
