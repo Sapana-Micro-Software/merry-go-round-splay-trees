@@ -16,42 +16,4 @@ export interface TreeNode {
     color: string;
     pulsePhase: number;
 }
-export declare class EnhancedTreeVisualizer {
-    private canvas;
-    private ctx;
-    private treeType;
-    private nodes;
-    private particles;
-    private operations;
-    private animationId;
-    private hoveredNode;
-    private selectedNode;
-    private time;
-    constructor(canvasId: string);
-    private setupEventListeners;
-    private handleMouseMove;
-    private handleClick;
-    private findNodeAt;
-    private updateButtons;
-    private init;
-    private generateSampleTree;
-    private generateBTree;
-    private generateSplayTree;
-    private flattenTree;
-    private layoutTree;
-    private draw;
-    private drawBackground;
-    private updateNodePosition;
-    private drawEdges;
-    private drawNode;
-    private lightenColor;
-    private createParticles;
-    private updateParticles;
-    private drawParticles;
-    private drawTooltip;
-    private animate;
-    private updateStats;
-    simulateOperation(): void;
-    private animateSplay;
-}
 //# sourceMappingURL=enhanced-visualizer.d.ts.map

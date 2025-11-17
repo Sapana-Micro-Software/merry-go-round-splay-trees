@@ -3,7 +3,7 @@
  * Copyright (C) 2025, Shyamal Suhana Chandra
  * All rights reserved.
  */
-export class EnhancedTreeVisualizer {
+class EnhancedTreeVisualizer {
     constructor(canvasId) {
         this.treeType = 'btree';
         this.nodes = [];
@@ -410,4 +410,17 @@ export class EnhancedTreeVisualizer {
         animate();
     }
 }
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const visualizer = new EnhancedTreeVisualizer('tree-canvas');
+        setInterval(() => {
+            visualizer.simulateOperation();
+        }, 3000);
+    }
+    catch (error) {
+        console.error('Failed to initialize enhanced tree visualizer:', error);
+    }
+});
+export {};
 //# sourceMappingURL=enhanced-visualizer.js.map

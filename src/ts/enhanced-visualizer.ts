@@ -27,7 +27,7 @@ interface Particle {
     color: string;
 }
 
-export class EnhancedTreeVisualizer {
+class EnhancedTreeVisualizer {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
     private treeType: 'btree' | 'splay' = 'btree';
@@ -479,3 +479,15 @@ export class EnhancedTreeVisualizer {
         animate();
     }
 }
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const visualizer = new EnhancedTreeVisualizer('tree-canvas');
+        setInterval(() => {
+            visualizer.simulateOperation();
+        }, 3000);
+    } catch (error) {
+        console.error('Failed to initialize enhanced tree visualizer:', error);
+    }
+});

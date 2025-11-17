@@ -4,22 +4,17 @@
  * All rights reserved.
  */
 
-import { EnhancedTreeVisualizer } from './enhanced-visualizer';
 import { PageAnimations } from './page-animations';
 import { CanvasBackground } from './canvas-background';
 
-document.addEventListener('DOMContentLoaded', () => {
-    try {
-        const visualizer = new EnhancedTreeVisualizer('tree-canvas');
-        setInterval(() => {
-            visualizer.simulateOperation();
-        }, 3000);
-    } catch (error) {
-        console.error('Failed to initialize enhanced tree visualizer:', error);
-    }
+// Enhanced visualizer initializes itself
+import './enhanced-visualizer';
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize page animations
     new PageAnimations().init();
 
+    // Initialize background canvas
     const bgCanvas = document.getElementById('background-canvas') as HTMLCanvasElement;
     if (bgCanvas) {
         new CanvasBackground('background-canvas');

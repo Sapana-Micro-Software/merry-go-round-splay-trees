@@ -6,7 +6,7 @@
 
 export class CanvasBackground {
     private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
+    private ctx!: CanvasRenderingContext2D;
     private particles: Array<{
         x: number;
         y: number;
