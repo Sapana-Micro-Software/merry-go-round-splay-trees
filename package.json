@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "B-Tree and Dynamic N-Way Splay Tree visualizations",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run build:css",
     "build:css": "postcss assets/css/main.css -o assets/css/main.css --map",
     "watch": "tsc --watch",
-    "serve": "jekyll serve"
+    "serve": "jekyll serve",
+    "build:all": "npm run build && bundle exec jekyll build"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
