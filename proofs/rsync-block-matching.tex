@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Rsync Block Matching Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Block Matching Complexity}
+
+\textbf{Statement:} Finding matching blocks using rolling checksum in splay tree takes $O(m \log n)$ time where $m$ is number of blocks to match and $n$ is number of stored blocks.
+
+\section{Proof}
+
+For each of $m$ blocks:
+\begin{enumerate}
+    \item Compute rolling checksum: $O(1)$
+    \item Search in splay tree: $O(\log n)$ amortized
+    \item Verify strong hash: $O(1)$
+\end{enumerate}
+
+Total: $m \times O(\log n) = O(m \log n)$
+
+\subsection{With Splay Optimization}
+
+Frequently matched blocks move to root, reducing average search time for common patterns.
+
+\textbf{Conclusion:} Block matching has $O(m \log n)$ time complexity, with better average case for common patterns.
+
+\end{document}

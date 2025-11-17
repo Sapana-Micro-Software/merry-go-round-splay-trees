@@ -1,0 +1,29 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{B-Tree Search Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: B-Tree Search Complexity}
+
+\textbf{Statement:} Searching in a B-Tree with $n$ keys takes $O(\log n)$ time.
+
+\section{Proof}
+
+\begin{enumerate}
+    \item Search traverses from root to leaf: $O(\log_t n)$ levels
+    \item At each level, perform binary search on at most $(2t-1)$ keys: $O(t) = O(1)$ if $t$ is constant
+    \item Number of levels: $O(\log_t n) = O(\log n)$
+    \item Total time: $O(\log n) \times O(1) = O(\log n)$
+\end{enumerate}
+
+\textbf{Conclusion:} B-Tree search has $O(\log n)$ time complexity.
+
+\end{document}

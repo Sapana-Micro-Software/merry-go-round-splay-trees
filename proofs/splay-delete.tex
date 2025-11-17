@@ -1,0 +1,29 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{N-Way Splay Tree Delete Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: N-Way Splay Tree Delete Complexity}
+
+\textbf{Statement:} Deleting from an N-way splay tree with $n$ nodes takes $O(\log n)$ amortized time.
+
+\section{Proof}
+
+\begin{enumerate}
+    \item Splay node to root: $O(\log n)$ amortized
+    \item Delete root: $O(1)$
+    \item If needed, splay successor/predecessor: $O(\log n)$ amortized
+    \item Total: $O(\log n)$ amortized
+\end{enumerate}
+
+\textbf{Conclusion:} N-way splay tree delete has $O(\log n)$ amortized time complexity.
+
+\end{document}

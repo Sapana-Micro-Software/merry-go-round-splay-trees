@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Splay Tree Amortized Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Splay Tree Amortized Complexity}
+
+\textbf{Statement:} The amortized time per operation in a splay tree is $O(\log n)$.
+
+\section{Proof (Potential Method)}
+
+Define potential function:
+\[ \Phi(T) = \sum_{v \in T} \log(\text{size}(v)) \]
+
+where $\text{size}(v)$ = number of nodes in subtree rooted at $v$.
+
+For operation with actual cost $c$, amortized cost:
+\[ \hat{c} = c + \Delta\Phi \]
+
+\subsection{Splay Operation Analysis}
+
+\begin{itemize}
+    \item \textbf{Zig step:} amortized cost $\leq 3(r'(x) - r(x)) + 1$
+    \item \textbf{Zig-Zig step:} amortized cost $\leq 3(r'(x) - r(x))$
+    \item \textbf{Zig-Zag step:} amortized cost $\leq 3(r'(x) - r(x)) - 2$
+\end{itemize}
+
+where $r(x) = \log(\text{size}(x))$ and $r'(x)$ is rank after operation.
+
+Summing over all splay steps:
+\[ \text{Total amortized cost} \leq 3(r(\text{root}) - r(x)) + 1 \]
+
+Since $r(\text{root}) = \log(n)$ and $r(x) \geq 0$:
+\[ \text{Amortized cost} \leq 3\log(n) + 1 = O(\log n) \]
+
+\textbf{Conclusion:} Splay tree operations have $O(\log n)$ amortized complexity.
+
+\end{document}

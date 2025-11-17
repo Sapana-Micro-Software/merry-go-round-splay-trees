@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Rsync Tree Construction Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Rsync Tree Construction Complexity}
+
+\textbf{Statement:} Building splay tree from file with $b$ blocks takes $O(b \log b)$ time.
+
+\section{Proof}
+
+For each of $b$ blocks:
+\begin{enumerate}
+    \item Compute checksums: $O(1)$
+    \item Insert into tree: $O(\log i)$ where $i$ is current tree size
+\end{enumerate}
+
+Sum: $\sum_{i=1}^{b} \log i = \log(b!) = b \log b$ (by Stirling's approximation)
+
+\textbf{Conclusion:} Rsync tree construction has $O(b \log b)$ time complexity.
+
+\end{document}

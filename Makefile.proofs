@@ -1,0 +1,26 @@
+# Makefile for generating PDFs from LaTeX proofs
+# Copyright (C) 2025, Shyamal Suhana Chandra
+
+LATEX = pdflatex
+LATEXFLAGS = -interaction=nonstopmode -output-directory=proofs
+
+PROOFS = btree-height btree-search btree-insert btree-delete \
+         splay-amortized splay-search splay-insert splay-delete \
+         dynamic-branching rsync-block-matching rsync-construction
+
+.PHONY: all clean
+
+all: $(addsuffix .pdf, $(addprefix proofs/, $(PROOFS)))
+
+proofs/%.pdf: proofs/%.tex
+	cd proofs && $(LATEX) $(LATEXFLAGS) $(notdir $<)
+	cd proofs && $(LATEX) $(LATEXFLAGS) $(notdir $<)  # Run twice for references
+
+clean:
+	rm -f proofs/*.aux proofs/*.log proofs/*.out proofs/*.pdf
+
+install-deps:
+	@echo "Install LaTeX distribution:"
+	@echo "  macOS: brew install --cask mactex"
+	@echo "  Linux: sudo apt-get install texlive-full"
+	@echo "  Windows: Install MiKTeX or TeX Live"

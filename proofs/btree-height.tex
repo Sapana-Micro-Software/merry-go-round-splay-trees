@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{B-Tree Height Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: B-Tree Height}
+
+\textbf{Statement:} For a B-Tree of order $t$ (min degree) with $n$ keys, the height $h$ satisfies:
+\[ h \leq \log_t \frac{n+1}{2} \]
+
+\section{Proof}
+
+A B-Tree of height $h$ has at least:
+\begin{itemize}
+    \item Root: 1 node with at least 1 key
+    \item Level 1: at least 2 nodes with at least $(t-1)$ keys each
+    \item Level 2: at least $2t$ nodes with at least $(t-1)$ keys each
+    \item Level $h$: at least $2t^{h-1}$ nodes with at least $(t-1)$ keys each
+\end{itemize}
+
+Total minimum keys:
+\begin{align}
+n &\geq 1 + 2(t-1) + 2t(t-1) + \ldots + 2t^{h-1}(t-1) \\
+n &\geq 1 + 2(t-1)(1 + t + t^2 + \ldots + t^{h-1}) \\
+n &\geq 1 + 2(t-1)\frac{t^h - 1}{t - 1} \\
+n &\geq 1 + 2(t^h - 1) \\
+n &\geq 2t^h - 1 \\
+t^h &\leq \frac{n+1}{2} \\
+h &\leq \log_t \frac{n+1}{2}
+\end{align}
+
+\textbf{Corollary:} Height is $O(\log_t n) = O(\log n)$ when $t$ is constant.
+
+\end{document}

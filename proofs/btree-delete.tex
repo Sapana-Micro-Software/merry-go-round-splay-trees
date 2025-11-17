@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{B-Tree Delete Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: B-Tree Delete Complexity}
+
+\textbf{Statement:} Deleting from a B-Tree with $n$ keys takes $O(\log n)$ time.
+
+\section{Proof}
+
+\begin{enumerate}
+    \item Find node to delete: $O(\log n)$
+    \item If internal node, find predecessor/successor: $O(\log n)$
+    \item Delete from node: $O(1)$
+    \item Handle underflow:
+    \begin{itemize}
+        \item Borrow from sibling: $O(1)$
+        \item Merge with sibling: $O(t) = O(1)$
+        \item Propagate upward: at most $O(\log n)$ levels
+    \end{itemize}
+    \item Total time: $O(\log n) + O(\log n) = O(\log n)$
+\end{enumerate}
+
+\textbf{Conclusion:} B-Tree delete has $O(\log n)$ time complexity.
+
+\end{document}

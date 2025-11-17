@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{B-Tree Insert Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: B-Tree Insert Complexity}
+
+\textbf{Statement:} Inserting into a B-Tree with $n$ keys takes $O(\log n)$ time.
+
+\section{Proof}
+
+\begin{enumerate}
+    \item Find insertion point: $O(\log n)$ (same as search)
+    \item Insert into leaf: $O(1)$
+    \item If node splits:
+    \begin{itemize}
+        \item Split operation: $O(t) = O(1)$ if $t$ is constant
+        \item Propagate split upward: at most $O(\log n)$ levels
+    \end{itemize}
+    \item Total time: $O(\log n) + O(\log n) \times O(1) = O(\log n)$
+\end{enumerate}
+
+\textbf{Conclusion:} B-Tree insert has $O(\log n)$ time complexity.
+
+\end{document}

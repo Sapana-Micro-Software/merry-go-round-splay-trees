@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Dynamic Branching Adjustment Complexity Proof}
+\author{Shyamal Suhana Chandra}
+\date{Copyright (C) 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Theorem: Dynamic Branching Adjustment Complexity}
+
+\textbf{Statement:} Adjusting branching factor in an N-way splay tree takes $O(1)$ amortized time per operation.
+
+\section{Proof}
+
+\begin{enumerate}
+    \item Branching adjustment triggered when: $|\text{children}| > \text{maxChildren}$ or optimal branching changes
+    \item Split operation: $O(t)$ where $t$ is current branching factor
+    \item Since $t \leq \sqrt{n}$ (by design), split cost: $O(\sqrt{n})$
+    \item Split occurs at most once per $O(\sqrt{n})$ insertions
+    \item Amortized cost: $\frac{O(\sqrt{n})}{O(\sqrt{n})} = O(1)$
+\end{enumerate}
+
+\textbf{Conclusion:} Dynamic branching adjustment has $O(1)$ amortized time complexity.
+
+\end{document}
